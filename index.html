@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AddisPitch | Book Your Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#0a0a0a',
+                            dark: '#121212',
+                            card: '#1a1a1a',
+                            green: '#10b981',
+                            greenDark: '#047857',
+                            greenLight: '#34d399'
+                        },
+                        telebirr: {
+                            blue: '#00A3E0',
+                            dark: '#0077A3'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+        .pitch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15);
+        }
+        .pitch-card:hover .card-img {
+            transform: scale(1.05);
+        }
+        .card-img {
+            transition: transform 0.5s ease;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+        .modal-overlay {
+            backdrop-filter: blur(5px);
+        }
+        .calendar-dropdown {
+            position: absolute;
+            z-index: 100;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .time-slot {
+            transition: all 0.2s ease;
+        }
+        .time-slot:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+        .time-slot.selected {
+            background: #10b981;
+            color: #000;
+            border-color: #10b981;
+        }
+        .time-slot.unavailable {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #333;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        #map-container {
+    height: 250px; /* Shorter for mobile */
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    #map-container {
+        height: 400px; /* Full size for desktop */
+    }
+}
+        .leaflet-container {
+            background: #1a1a1a;
+        }
+        .qr-code-container {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .processing {
+            animation: pulse 1.5s infinite;
+        }
+        .success-checkmark {
+            animation: checkmark 0.5s ease-in-out forwards;
+        }
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        .team-member-input {
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active {
+            background: #10b981;
+            color: #000;
+            border-color: #10b981;
+        }
+        @media (max-width: 768px) {
+            /* Inside the @media (max-width: 768px) block */
+.hero-title {
+    font-size: 1.75rem !important; /* Smaller header for mobile phones */
+    line-height: 1.2;
+}
+.search-container {
+    padding: 1rem !important; /* Tighten search bar padding */
+}
+input, button {
+    font-size: 16px !important; /* Prevents iOS from auto-zooming when typing */
+}
+            .hero-title {
+                font-size: 2rem;
+            }
+            .pitch-grid {
+                grid-template-columns: 1fr;
+            }
+            .tournament-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        .toast.success {
+            border-color: #10b981;
+        }
+        .toast.error {
+            border-color: #ef4444;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+ .hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }   </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-brand-black/90 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
+                    <i class="fa-solid fa-futbol text-brand-green text-2xl md:text-3xl"></i>
+                    <span class="text-xl md:text-2xl font-bold tracking-tight text-white">Addis<span class="text-brand-green">Pitch</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#" onclick="navigateTo('home')" class="text-white hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="#" onclick="navigateTo('tournaments')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Tournaments</a>
+                        <a href="#" onclick="navigateTo('location')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Location</a>
+                        <a href="#" onclick="navigateTo('bookings')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">My Bookings</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="navigateTo('auth')" class="hidden md:block bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105">
+                        Sign In
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-white p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+     <div id="mobile-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileMenu()"></div>
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-brand-card z-50 border-l border-white/10 md:hidden">
+        <div class="p-4">
+            <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white mb-6">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="space-y-4">
+                <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-white hover:text-brand-green py-2">Home</a>
+                <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
+                <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
+                <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
+                <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="page active pt-16 md:pt-20">
+        <!-- Hero Section -->
+        <div class="relative pt-12 pb-12 md:pt-24 md:pb-24 flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png" alt="Stadium Background" class="w-full h-full object-cover opacity-20">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/80 to-transparent"></div>
+            </div>
+            
+            <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+                <h1 class="hero-title text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 md:mb-6">
+                    Find Your Field in <span class="text-brand-green">Addis Ababa</span>
+                </h1>
+                <p class="text-base md:text-xl text-gray-400 mb-8 md:mb-10 max-w-2xl mx-auto px-4">
+                    Book premium 5v5 and 7v7 pitches instantly. From Bole to Kazanchis, we've got the best turf for your next match.
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="bg-brand-card p-3 md:p-4 rounded-2xl shadow-2xl border border-white/10 flex flex-col md:flex-row gap-3 md:gap-4 max-w-3xl mx-auto">
+                    <div class="flex-1 relative">
+                        <i class="fa-solid fa-location-dot absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" id="home-location-search" placeholder="Location (e.g., Bole, CMC)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green transition-colors text-sm md:text-base">
+                    </div>
+                    <div class="flex-1 relative">
+                        <i class="fa-regular fa-calendar absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" id="home-date-input" placeholder="Date & Time" readonly onclick="toggleCalendar('home')" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green transition-colors cursor-pointer text-sm md:text-base">
+                        <div id="home-calendar-dropdown" class="calendar-dropdown hidden mt-2 w-full max-w-xs">
+                            <div id="home-calendar"></div>
+                        </div>
+                    </div>
+                    <button onclick="searchPitches()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 px-4 md:px-8 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
+                        <i class="fa-solid fa-magnifying-glass"></i> <span class="hidden md:inline">Search</span>
+                    </button>
+                </div>
+
+                <!-- Near Me Button -->
+                <div class="mt-4 md:mt-6">
+                    <button onclick="findNearMe()" class="bg-white/10 hover:bg-brand-green hover:text-black text-white border border-white/20 font-semibold py-2 md:py-3 px-4 md:px-8 rounded-xl transition-all flex items-center gap-2 mx-auto text-sm md:text-base">
+                        <i class="fa-solid fa-location-crosshairs"></i> Find Pitches Near Me
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+<div class="flex flex-nowrap items-center gap-3 overflow-x-auto pb-4 hide-scrollbar snap-x px-2">                <button onclick="filterPitches('all')" class="filter-btn active px-4 md:px-6 py-2 rounded-full bg-brand-green text-black font-semibold border border-brand-green whitespace-nowrap text-sm transition-all">
+                    All
+                </button>
+                <button onclick="filterPitches('5v5')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    5v5
+                </button>
+                <button onclick="filterPitches('7v7')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    7v7
+                </button>
+                <button onclick="filterPitches('Indoor')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Indoor
+                </button>
+                <button onclick="filterPitches('Night Lights')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Night Lights
+                </button>
+                <button onclick="filterPitches('Parking')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Parking
+                </button>
+                <button onclick="filterPitches('Showers')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Showers
+                </button>
+                <button onclick="clearFilters()" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-white/10 text-gray-300 hover:text-white border border-white/10 hover:border-red-500 transition-all whitespace-nowrap text-sm">
+                    <i class="fa-solid fa-xmark mr-1"></i> Clear
+                </button>
+            </div>
+            <div class="mt-4 flex items-center justify-between">
+                <p class="text-sm text-gray-400">
+                    <span id="filter-count">0</span> pitches found
+                </p>
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-gray-400">Sort by:</label>
+                    <select onchange="sortPitches(this.value)" class="bg-brand-card border border-white/10 rounded-lg py-1 px-3 text-white text-sm focus:outline-none focus:border-brand-green">
+                        <option value="popular">Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Rating</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pitch Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+            <h2 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 flex items-center gap-2">
+                <i class="fa-solid fa-fire text-brand-green"></i> Trending Pitches
+            </h2>
+            
+            <div class="pitch-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8" id="pitch-container">
+                <!-- Cards will be injected here via JS -->
+            </div>
+            
+            <!-- No Results -->
+            <div id="no-results" class="hidden text-center py-12">
+                <i class="fa-solid fa-futbol text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-bold text-white mb-2">No pitches found</h3>
+                <p class="text-gray-400 mb-4">Try adjusting your filters or search terms</p>
+                <button onclick="clearFilters()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 px-6 rounded-xl transition-all">
+                    Clear All Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKINGS PAGE -->
+    <div id="bookings-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-2xl md:text-3xl font-bold mb-6">My Bookings</h1>
+            
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <button onclick="showBookingTab('upcoming')" id="upcoming-tab" class="text-brand-green font-semibold border-b-2 border-brand-green pb-2">Upcoming</button>
+                    <button onclick="showBookingTab('history')" id="history-tab" class="text-gray-400 font-semibold pb-2 hover:text-white">History</button>
+                </div>
+                
+                <div id="bookings-list" class="space-y-4">
+                    <!-- Bookings will be injected here -->
+                </div>
+                
+                <div id="no-bookings" class="text-center py-12 hidden">
+                    <i class="fa-regular fa-calendar-xmark text-6xl text-gray-600 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">No bookings yet</h3>
+                    <p class="text-gray-400 mb-4">Book your first pitch to get started</p>
+                    <button onclick="navigateTo('home')" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 px-6 rounded-xl transition-all">
+                        Browse Pitches
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKING PAGE -->
+    <div id="booking-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <button onclick="navigateTo('home')" class="text-gray-400 hover:text-white mb-4 md:mb-6 flex items-center gap-2 text-sm md:text-base">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </button>
+            
+            <div class="bg-brand-card rounded-2xl border border-white/10 overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2">
+                        <img id="booking-pitch-image" src="" alt="Pitch" class="w-full h-48 md:h-64 lg:h-full object-cover">
+                    </div>
+                    <div class="md:w-1/2 p-4 md:p-6">
+                        <h1 id="booking-pitch-name" class="text-xl md:text-2xl font-bold text-white mb-2">Pitch Name</h1>
+                        <p id="booking-pitch-location" class="text-brand-green mb-4 text-sm md:text-base"><i class="fa-solid fa-location-dot mr-2"></i> Location</p>
+                        <p id="booking-pitch-price" class="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6">ETB 0<span class="text-sm text-gray-400 font-normal">/hour</span></p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4 md:mb-6">
+                            <span class="text-xs bg-white/5 text-gray-300 px-2 md:px-3 py-1 rounded border border-white/5"><i class="fa-solid fa-wifi mr-1"></i> WiFi</span>
+                            <span class="text-xs bg-white/5 text-gray-300 px-2 md:px-3 py-1 rounded border border-white/5"><i class="fa-solid fa-shower mr-1"></i> Showers</span>
+                            <span class="text-xs bg-white/5 text-gray-300 px-2 md:px-3 py-1 rounded border border-white/5"><i class="fa-solid fa-parking mr-1"></i> Parking</span>
+                        </div>
+
+                        <button onclick="showRouteMap()" class="w-full bg-white/10 hover:bg-brand-green hover:text-black text-white border border-white/20 font-semibold py-2 md:py-3 rounded-xl transition-all flex items-center justify-center gap-2 mb-4 text-sm md:text-base">
+                            <i class="fa-solid fa-map-location-dot"></i> Get Directions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Selection -->
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6 mt-4 md:mt-6">
+                <h2 class="text-lg md:text-xl font-bold mb-4">Select Date</h2>
+                <div class="relative">
+                    <button onclick="toggleCalendar('booking')" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 md:py-4 px-4 text-white focus:outline-none focus:border-brand-green transition-colors flex items-center justify-between text-sm md:text-base">
+                        <span id="booking-date-display"><i class="fa-regular fa-calendar mr-3"></i> Choose a date</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div id="booking-calendar-dropdown" class="calendar-dropdown hidden w-full mt-2 max-w-xs">
+                        <div id="booking-calendar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Slot Selection -->
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6 mt-4 md:mt-6">
+                <h2 class="text-lg md:text-xl font-bold mb-4">Select Time Slot</h2>
+                <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3" id="time-slots-container">
+                    <!-- Time slots will be injected here -->
+                </div>
+                <p class="text-xs md:text-sm text-gray-400 mt-4"><i class="fa-solid fa-circle-info mr-2"></i>Green slots are available, gray slots are booked</p>
+            </div>
+
+            <!-- Duration Selection -->
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6 mt-4 md:mt-6">
+                <h2 class="text-lg md:text-xl font-bold mb-4">Duration</h2>
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="selectDuration(1)" class="duration-btn active py-3 rounded-xl border border-brand-green bg-brand-green text-black font-semibold text-sm md:text-base">1 Hour</button>
+                    <button onclick="selectDuration(1.5)" class="duration-btn py-3 rounded-xl border border-white/10 bg-brand-black text-white font-semibold text-sm md:text-base">1.5 Hours</button>
+                    <button onclick="selectDuration(2)" class="duration-btn py-3 rounded-xl border border-white/10 bg-brand-black text-white font-semibold text-sm md:text-base">2 Hours</button>
+                </div>
+            </div>
+
+            <!-- Booking Summary -->
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6 mt-4 md:mt-6">
+                <h2 class="text-lg md:text-xl font-bold mb-4">Booking Summary</h2>
+                <div class="space-y-2 md:space-y-3 text-sm md:text-base">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Date</span>
+                        <span id="summary-date" class="text-white">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Time</span>
+                        <span id="summary-time" class="text-white">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Duration</span>
+                        <span id="summary-duration" class="text-white">1 Hour</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Price</span>
+                        <span id="summary-price" class="text-white">ETB 0</span>
+                    </div>
+                    <div class="border-t border-white/10 pt-3 md:pt-4 flex justify-between text-base md:text-lg font-bold">
+                        <span class="text-white">Total</span>
+                        <span id="summary-total" class="text-brand-green">ETB 0</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 md:mt-6 space-y-3 md:space-y-4">
+                    <input type="text" id="booking-name" placeholder="Full Name" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                    <input type="tel" id="booking-phone" placeholder="Phone Number (+251...)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                    <input type="email" id="booking-email" placeholder="Email (optional)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                </div>
+
+                <button onclick="proceedToPayment()" class="w-full mt-4 md:mt-6 bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 md:py-4 rounded-xl transition-all transform hover:scale-[1.02] text-sm md:text-base">
+                    Proceed to Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT PAGE -->
+    <div id="payment-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-2xl mx-auto px-4">
+            <button onclick="navigateTo('booking')" class="text-gray-400 hover:text-white mb-4 md:mb-6 flex items-center gap-2 text-sm md:text-base">
+                <i class="fa-solid fa-arrow-left"></i> Back to Booking
+            </button>
+
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-8">
+                <h1 class="text-xl md:text-2xl font-bold text-white mb-2">Complete Payment</h1>
+                <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base">Secure payment with Telebirr</p>
+
+                <!-- Order Summary -->
+                <div class="bg-brand-black rounded-xl p-4 md:p-6 border border-white/10 mb-4 md:mb-6">
+                    <h3 class="font-semibold text-white mb-3 md:mb-4 text-sm md:text-base">Order Summary</h3>
+                    <div class="space-y-2 md:space-y-3 text-xs md:text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Pitch</span>
+                            <span id="payment-pitch-name" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Date & Time</span>
+                            <span id="payment-datetime" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Duration</span>
+                            <span id="payment-duration" class="text-white">1 Hour</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Customer</span>
+                            <span id="payment-customer" class="text-white">-</span>
+                        </div>
+                        <div class="border-t border-white/10 pt-2 md:pt-3 flex justify-between text-base md:text-lg font-bold">
+                            <span class="text-white">Total Amount</span>
+                            <span id="payment-total" class="text-brand-green">ETB 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="mb-4 md:mb-6">
+                    <h3 class="font-semibold text-white mb-3 md:mb-4 text-sm md:text-base">Payment Method</h3>
+                    <div class="bg-telebirr-blue/20 border border-telebirr-blue rounded-xl p-4 md:p-6 cursor-pointer hover:border-telebirr-blue/50 transition-all">
+                        <div class="flex items-center gap-3 md:gap-4">
+                            <div class="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+                                <span class="text-telebirr-blue font-bold text-sm md:text-lg">tele</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-white text-sm md:text-base">Telebirr</h4>
+                                <p class="text-xs md:text-sm text-gray-300">Pay with your Telebirr account</p>
+                            </div>
+                            <i class="fa-solid fa-circle-check text-telebirr-blue text-xl md:text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Number for Payment -->
+                <div class="mb-4 md:mb-6">
+                    <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Telebirr Phone Number</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="tel" id="telebirr-phone" placeholder="+251 911 234 567" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 md:py-4 pl-12 pr-4 text-white focus:outline-none focus:border-telebirr-blue text-sm md:text-base">
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">A payment request will be sent to this number</p>
+                </div>
+
+                <!-- Pay Button -->
+                <button onclick="processPayment()" id="pay-button" class="w-full bg-telebirr-blue hover:bg-telebirr-dark text-white font-bold py-3 md:py-4 rounded-xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2 md:gap-3 text-sm md:text-base">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <span>Pay with Telebirr</span>
+                </button>
+
+                <!-- Processing State -->
+                <div id="payment-processing" class="hidden text-center py-6 md:py-8">
+                    <div class="inline-block w-12 h-12 md:w-16 md:h-16 border-4 border-telebirr-blue border-t-transparent rounded-full animate-spin mb-3 md:mb-4"></div>
+                    <p class="text-white font-semibold processing text-sm md:text-base">Processing Payment...</p>
+                    <p class="text-gray-400 text-xs md:text-sm mt-2">Please check your phone to complete the payment</p>
+                </div>
+
+                <!-- Success State -->
+                <div id="payment-success" class="hidden text-center py-6 md:py-8">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-brand-green rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 success-checkmark">
+                        <i class="fa-solid fa-check text-2xl md:text-3xl text-black"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-2">Payment Successful!</h3>
+                    <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base">Your booking has been confirmed</p>
+                    <button onclick="showQRCode()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 md:py-3 px-6 md:px-8 rounded-xl transition-all text-sm md:text-base">
+                        <i class="fa-solid fa-qrcode mr-2"></i>View Entrance QR Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="mt-4 md:mt-6 flex items-center justify-center gap-4 md:gap-6 text-gray-500 text-xs md:text-sm flex-wrap">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Secure Payment</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>SSL Encrypted</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>24/7 Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR CODE PAGE -->
+    <div id="qr-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-lg mx-auto px-4">
+            <button onclick="navigateTo('home')" class="text-gray-400 hover:text-white mb-4 md:mb-6 flex items-center gap-2 text-sm md:text-base">
+                <i class="fa-solid fa-home"></i> Back to Home
+            </button>
+
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-8 text-center">
+                <div class="w-12 h-12 md:w-16 md:h-16 bg-brand-green rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <i class="fa-solid fa-check text-xl md:text-2xl text-black"></i>
+                </div>
+                <h1 class="text-xl md:text-2xl font-bold text-white mb-2">Booking Confirmed!</h1>
+                <p class="text-gray-400 mb-6 md:mb-8 text-sm md:text-base">Show this QR code at the pitch entrance</p>
+
+                <!-- QR Code Container -->
+                <div class="bg-white rounded-2xl p-4 md:p-6 inline-block mb-6 md:mb-8">
+                    <div id="qr-code" class="qr-code-container"></div>
+                </div>
+
+                <!-- Booking Details -->
+                <div class="bg-brand-black rounded-xl p-4 md:p-6 border border-white/10 mb-4 md:mb-6 text-left">
+                    <h3 class="font-semibold text-white mb-3 md:mb-4 border-b border-white/10 pb-2 text-sm md:text-base">Booking Details</h3>
+                    <div class="space-y-2 md:space-y-3 text-xs md:text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Booking ID</span>
+                            <span id="qr-booking-id" class="text-white font-mono">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Pitch</span>
+                            <span id="qr-pitch-name" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Date</span>
+                            <span id="qr-date" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Time</span>
+                            <span id="qr-time" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Customer</span>
+                            <span id="qr-customer" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Phone</span>
+                            <span id="qr-phone" class="text-white">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-3 md:gap-4">
+                    <button onclick="downloadQR()" class="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-2 md:py-3 rounded-xl transition-all text-xs md:text-sm">
+                        <i class="fa-solid fa-download mr-2"></i>Download
+                    </button>
+                    <button onclick="shareQR()" class="flex-1 bg-brand-green hover:bg-brand-greenDark text-black font-semibold py-2 md:py-3 rounded-xl transition-all text-xs md:text-sm">
+                        <i class="fa-solid fa-share mr-2"></i>Share
+                    </button>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mt-4 md:mt-6 p-3 md:p-4 bg-telebirr-blue/10 border border-telebirr-blue/30 rounded-xl">
+                    <p class="text-xs md:text-sm text-gray-300">
+                        <i class="fa-solid fa-circle-info text-telebirr-blue mr-2"></i>
+                        Please arrive 10 minutes before your booking time. The QR code is valid for single use only.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOURNAMENT REGISTRATION PAGE -->
+    <div id="tournament-registration-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <button onclick="navigateTo('tournaments')" class="text-gray-400 hover:text-white mb-4 md:mb-6 flex items-center gap-2 text-sm md:text-base">
+                <i class="fa-solid fa-arrow-left"></i> Back to Tournaments
+            </button>
+
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-8">
+                <div class="mb-6 md:mb-8">
+                    <h1 class="text-xl md:text-2xl font-bold text-white mb-2">Tournament Registration</h1>
+                    <p class="text-gray-400 text-sm md:text-base">Register your team for the tournament</p>
+                </div>
+
+                <!-- Tournament Info -->
+                <div class="bg-brand-black rounded-xl p-4 md:p-6 border border-white/10 mb-6 md:mb-8">
+                    <div class="flex flex-col md:flex-row gap-4 md:gap-6">
+                        <img id="reg-tournament-image" src="" alt="Tournament" class="w-full md:w-32 h-32 md:h-32 object-cover rounded-xl">
+                        <div class="flex-1">
+                            <h2 id="reg-tournament-name" class="text-lg md:text-xl font-bold text-white mb-2">Tournament Name</h2>
+                            <div class="grid grid-cols-2 gap-2 md:gap-4 text-xs md:text-sm text-gray-400">
+                                <div><span class="text-white">Format:</span> <span id="reg-format">-</span></div>
+                                <div><span class="text-white">Age Group:</span> <span id="reg-age">-</span></div>
+                                <div><span class="text-white">Gender:</span> <span id="reg-gender">-</span></div>
+                                <div><span class="text-white">Prize:</span> <span id="reg-prize" class="text-brand-green">-</span></div>
+                            </div>
+                            <p class="text-brand-green font-bold mt-3 md:mt-4 text-base md:text-lg">Registration Fee: <span id="reg-fee">ETB 5000</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Info Form -->
+                <form id="team-registration-form" onsubmit="proceedToTournamentPayment(event)">
+                    <div class="mb-6 md:mb-8">
+                        <h3 class="font-semibold text-white mb-4 text-base md:text-lg">Team Information</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Team Name</label>
+                                <input type="text" id="team-name" placeholder="Enter team name" required class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                            </div>
+                            <div>
+                                <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Team Captain</label>
+                                <input type="text" id="team-captain" placeholder="Captain's full name" required class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                            </div>
+                            <div>
+                                <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Captain's Phone</label>
+                                <input type="tel" id="team-phone" placeholder="+251 911 234 567" required class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                            </div>
+                            <div>
+                                <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Captain's Email (optional)</label>
+                                <input type="email" id="team-email" placeholder="email@example.com" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Members -->
+                    <div class="mb-6 md:mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-white text-base md:text-lg">Team Members</h3>
+                            <button type="button" onclick="addTeamMember()" class="text-brand-green hover:text-brand-greenLight text-sm md:text-base flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> Add Player
+                            </button>
+                        </div>
+                        <p class="text-xs md:text-sm text-gray-400 mb-4">Minimum 5 players, Maximum 12 players</p>
+                        <div id="team-members-container" class="space-y-3 md:space-y-4">
+                            <!-- Team member inputs will be added here -->
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-black rounded-xl p-4 border border-white/10 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400 text-sm md:text-base">Total Registration Fee</span>
+                            <span id="reg-total-fee" class="text-brand-green font-bold text-lg md:text-xl">ETB 0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 md:py-4 rounded-xl transition-all transform hover:scale-[1.02] text-sm md:text-base">
+                        Proceed to Payment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOURNAMENT PAYMENT PAGE -->
+    <div id="tournament-payment-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-2xl mx-auto px-4">
+            <button onclick="navigateTo('tournament-registration')" class="text-gray-400 hover:text-white mb-4 md:mb-6 flex items-center gap-2 text-sm md:text-base">
+                <i class="fa-solid fa-arrow-left"></i> Back to Registration
+            </button>
+
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-8">
+                <h1 class="text-xl md:text-2xl font-bold text-white mb-2">Tournament Registration Payment</h1>
+                <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base">Secure payment with Telebirr</p>
+
+                <!-- Order Summary -->
+                <div class="bg-brand-black rounded-xl p-4 md:p-6 border border-white/10 mb-4 md:mb-6">
+                    <h3 class="font-semibold text-white mb-3 md:mb-4 text-sm md:text-base">Registration Summary</h3>
+                    <div class="space-y-2 md:space-y-3 text-xs md:text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Tournament</span>
+                            <span id="tp-tournament-name" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Team Name</span>
+                            <span id="tp-team-name" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Team Captain</span>
+                            <span id="tp-captain" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Players</span>
+                            <span id="tp-players" class="text-white">-</span>
+                        </div>
+                        <div class="border-t border-white/10 pt-2 md:pt-3 flex justify-between text-base md:text-lg font-bold">
+                            <span class="text-white">Registration Fee</span>
+                            <span id="tp-total" class="text-brand-green">ETB 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="mb-4 md:mb-6">
+                    <h3 class="font-semibold text-white mb-3 md:mb-4 text-sm md:text-base">Payment Method</h3>
+                    <div class="bg-telebirr-blue/20 border border-telebirr-blue rounded-xl p-4 md:p-6">
+                        <div class="flex items-center gap-3 md:gap-4">
+                            <div class="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+                                <span class="text-telebirr-blue font-bold text-sm md:text-lg">tele</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-white text-sm md:text-base">Telebirr</h4>
+                                <p class="text-xs md:text-sm text-gray-300">Pay with your Telebirr account</p>
+                            </div>
+                            <i class="fa-solid fa-circle-check text-telebirr-blue text-xl md:text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Number for Payment -->
+                <div class="mb-4 md:mb-6">
+                    <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Telebirr Phone Number</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="tel" id="tp-telebirr-phone" placeholder="+251 911 234 567" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 md:py-4 pl-12 pr-4 text-white focus:outline-none focus:border-telebirr-blue text-sm md:text-base">
+                    </div>
+                </div>
+
+                <!-- Pay Button -->
+                <button onclick="processTournamentPayment()" id="tp-pay-button" class="w-full bg-telebirr-blue hover:bg-telebirr-dark text-white font-bold py-3 md:py-4 rounded-xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2 md:gap-3 text-sm md:text-base">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <span>Pay Registration Fee</span>
+                </button>
+
+                <!-- Processing State -->
+                <div id="tp-payment-processing" class="hidden text-center py-6 md:py-8">
+                    <div class="inline-block w-12 h-12 md:w-16 md:h-16 border-4 border-telebirr-blue border-t-transparent rounded-full animate-spin mb-3 md:mb-4"></div>
+                    <p class="text-white font-semibold processing text-sm md:text-base">Processing Payment...</p>
+                </div>
+
+                <!-- Success State -->
+                <div id="tp-payment-success" class="hidden text-center py-6 md:py-8">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-brand-green rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 success-checkmark">
+                        <i class="fa-solid fa-check text-2xl md:text-3xl text-black"></i>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-2">Registration Complete!</h3>
+                    <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base">Your team is registered for the tournament</p>
+                    <button onclick="showTournamentQR()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 md:py-3 px-6 md:px-8 rounded-xl transition-all text-sm md:text-base">
+                        <i class="fa-solid fa-qrcode mr-2"></i>View Registration QR Code
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOURNAMENT QR PAGE -->
+    <div id="tournament-qr-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-lg mx-auto px-4">
+            <button onclick="navigateTo('tournaments')" class="text-gray-400 hover:text-white mb-4 md:mb-6 flex items-center gap-2 text-sm md:text-base">
+                <i class="fa-solid fa-home"></i> Back to Tournaments
+            </button>
+
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-8 text-center">
+                <div class="w-12 h-12 md:w-16 md:h-16 bg-brand-green rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                    <i class="fa-solid fa-trophy text-xl md:text-2xl text-black"></i>
+                </div>
+                <h1 class="text-xl md:text-2xl font-bold text-white mb-2">Registration Confirmed!</h1>
+                <p class="text-gray-400 mb-6 md:mb-8 text-sm md:text-base">Show this QR code at tournament check-in</p>
+
+                <!-- QR Code Container -->
+                <div class="bg-white rounded-2xl p-4 md:p-6 inline-block mb-6 md:mb-8">
+                    <div id="tournament-qr-code" class="qr-code-container"></div>
+                </div>
+
+                <!-- Registration Details -->
+                <div class="bg-brand-black rounded-xl p-4 md:p-6 border border-white/10 mb-4 md:mb-6 text-left">
+                    <h3 class="font-semibold text-white mb-3 md:mb-4 border-b border-white/10 pb-2 text-sm md:text-base">Registration Details</h3>
+                    <div class="space-y-2 md:space-y-3 text-xs md:text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Registration ID</span>
+                            <span id="tqr-reg-id" class="text-white font-mono">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Tournament</span>
+                            <span id="tqr-tournament" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Team Name</span>
+                            <span id="tqr-team" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Captain</span>
+                            <span id="tqr-captain" class="text-white">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Players</span>
+                            <span id="tqr-players" class="text-white">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-3 md:gap-4">
+                    <button onclick="downloadTournamentQR()" class="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-2 md:py-3 rounded-xl transition-all text-xs md:text-sm">
+                        <i class="fa-solid fa-download mr-2"></i>Download
+                    </button>
+                    <button onclick="shareTournamentQR()" class="flex-1 bg-brand-green hover:bg-brand-greenDark text-black font-semibold py-2 md:py-3 rounded-xl transition-all text-xs md:text-sm">
+                        <i class="fa-solid fa-share mr-2"></i>Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAP/LOCATION PAGE -->
+    <div id="location-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <h1 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Find Pitches on Map</h1>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Search Panel -->
+                <div class="lg:col-span-1">
+                    <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6">
+                        <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4">Search Location</h2>
+                        <div class="relative mb-3 md:mb-4">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="text" id="location-search-input" placeholder="Search by area..." oninput="filterPitchesByLocation()" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                        <button onclick="findNearMe()" class="w-full bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 md:py-3 rounded-xl transition-all flex items-center justify-center gap-2 mb-3 md:mb-4 text-sm md:text-base">
+                            <i class="fa-solid fa-location-crosshairs"></i> Find Near Me
+                        </button>
+                        
+                        <h3 class="font-semibold mb-2 md:mb-3 text-gray-300 text-sm md:text-base">Available Pitches</h3>
+                        <div id="location-pitch-list" class="space-y-2 md:space-y-3 max-h-64 md:max-h-96 overflow-y-auto">
+                            <!-- Pitch list items -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Panel -->
+                <div class="lg:col-span-2">
+                    <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6">
+                        <div id="map-container" class="w-full"></div>
+                        <div id="route-panel" class="hidden mt-3 md:mt-4 p-3 md:p-4 bg-brand-black rounded-xl border border-white/10">
+                            <h3 class="font-bold mb-2 text-sm md:text-base">Route to Pitch</h3>
+                            <p id="route-info" class="text-gray-400 text-xs md:text-sm"></p>
+                            <a id="google-maps-link" href="#" target="_blank" class="inline-block mt-2 md:mt-3 bg-brand-green text-black font-semibold py-2 px-4 rounded-lg text-sm">
+                                <i class="fa-solid fa-navigation mr-2"></i> Open in Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOURNAMENTS PAGE -->
+    <div id="tournaments-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">Tournaments</h1>
+            <p class="text-gray-400 mb-6 md:mb-8 text-sm md:text-base">Join competitive leagues and tournaments in Addis Ababa</p>
+
+            <!-- Filters -->
+            <div class="flex flex-wrap items-center gap-2 md:gap-4 mb-6 md:mb-8 overflow-x-auto pb-2">
+                <button onclick="filterTournaments('all')" class="tournament-filter-btn active px-4 md:px-6 py-2 rounded-full bg-brand-green text-black font-semibold border border-brand-green whitespace-nowrap text-sm transition-all">
+                    All
+                </button>
+                <button onclick="filterTournaments('U-13')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    U-13
+                </button>
+                <button onclick="filterTournaments('U-17')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    U-17
+                </button>
+                <button onclick="filterTournaments('U-21')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    U-21
+                </button>
+                <button onclick="filterTournaments('Adult')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Adult
+                </button>
+                <button onclick="filterTournaments('Men')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Men
+                </button>
+                <button onclick="filterTournaments('Women')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Women
+                </button>
+                <button onclick="filterTournaments('Mixed')" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
+                    Mixed
+                </button>
+                <button onclick="clearTournamentFilters()" class="tournament-filter-btn px-4 md:px-6 py-2 rounded-full bg-white/10 text-gray-300 hover:text-white border border-white/10 hover:border-red-500 transition-all whitespace-nowrap text-sm">
+                    <i class="fa-solid fa-xmark mr-1"></i> Clear
+                </button>
+            </div>
+
+            <!-- Tournaments Grid -->
+            <div class="tournament-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="tournaments-container">
+                <!-- Tournament cards -->
+            </div>
+            
+            <!-- No Results -->
+            <div id="tournament-no-results" class="hidden text-center py-12">
+                <i class="fa-solid fa-trophy text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-bold text-white mb-2">No tournaments found</h3>
+                <p class="text-gray-400 mb-4">Try adjusting your filters</p>
+                <button onclick="clearTournamentFilters()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 px-6 rounded-xl transition-all">
+                    Clear All Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH PAGE -->
+    <div id="auth-page" class="page pt-16 md:pt-24 pb-12">
+        <div class="max-w-md mx-auto px-4">
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-8">
+                <!-- Tabs -->
+                <div class="flex mb-6 md:mb-8 border-b border-white/10">
+                    <button id="signin-tab" onclick="switchAuthTab('signin')" class="flex-1 py-2 md:py-3 text-brand-green font-semibold border-b-2 border-brand-green text-sm md:text-base">Sign In</button>
+                    <button id="signup-tab" onclick="switchAuthTab('signup')" class="flex-1 py-2 md:py-3 text-gray-400 font-semibold text-sm md:text-base">Sign Up</button>
+                </div>
+
+                <!-- Sign In Form -->
+                <form id="signin-form" class="space-y-4 md:space-y-6" onsubmit="handleSignIn(event)">
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="tel" id="signin-phone" placeholder="+251 911 234 567" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="password" id="signin-password" placeholder="••••••••" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded bg-brand-black border-white/10 text-brand-green focus:ring-brand-green">
+                            <span class="ml-2 text-xs md:text-sm text-gray-400">Remember me</span>
+                        </label>
+                        <a href="#" class="text-xs md:text-sm text-brand-green hover:underline">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 rounded-xl transition-all text-sm md:text-base">
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signup-form" class="space-y-4 md:space-y-6 hidden" onsubmit="handleSignUp(event)">
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="text" id="signup-name" placeholder="Abebe Bikila" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-phone absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="tel" id="signup-phone" placeholder="+251 911 234 567" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Email (optional)</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="email" id="signup-email" placeholder="email@example.com" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="password" id="signup-password" placeholder="••••••••" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs md:text-sm font-medium text-gray-400 mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="password" id="signup-confirm-password" placeholder="••••••••" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 rounded-xl transition-all text-sm md:text-base">
+                        Create Account
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="relative my-6 md:my-8">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-white/10"></div>
+                    </div>
+                    <div class="relative flex justify-center text-xs md:text-sm">
+                        <span class="px-4 bg-brand-card text-gray-400">Or continue with</span>
+                    </div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="grid grid-cols-2 gap-3 md:gap-4">
+                    <button class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white py-2 md:py-3 rounded-xl transition-all text-xs md:text-sm">
+                        <i class="fa-brands fa-google"></i> <span class="hidden md:inline">Google</span>
+                    </button>
+                    <button class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white py-2 md:py-3 rounded-xl transition-all text-xs md:text-sm">
+                        <i class="fa-brands fa-facebook"></i> <span class="hidden md:inline">Facebook</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Route Map Modal -->
+    <div id="route-modal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-black/80 modal-overlay" onclick="closeRouteModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl px-4">
+            <div class="bg-brand-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+                <div class="p-4 border-b border-white/10 flex justify-between items-center">
+                    <h3 class="text-lg md:text-xl font-bold text-white">Route to Pitch</h3>
+                    <button onclick="closeRouteModal()" class="text-gray-400 hover:text-white">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <div id="route-map-container" style="height: 250px; md:height: 300px; border-radius: 12px;"></div>
+                    <div class="mt-4 flex gap-3 md:gap-4">
+                        <a id="google-maps-btn" href="#" target="_blank" class="flex-1 bg-brand-green text-black font-semibold py-2 md:py-3 rounded-xl text-center text-sm md:text-base">
+                            <i class="fa-brands fa-google mr-2"></i> Open in Google Maps
+                        </a>
+                        <button onclick="closeRouteModal()" class="flex-1 bg-white/10 text-white font-semibold py-2 md:py-3 rounded-xl text-sm md:text-base">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-white/10 mt-auto py-8 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-3 md:mb-4">
+                        <i class="fa-solid fa-futbol text-brand-green text-xl md:text-2xl"></i>
+                        <span class="text-lg md:text-xl font-bold text-white">Addis<span class="text-brand-green">Pitch</span></span>
+                    </div>
+                    <p class="text-gray-400 text-xs md:text-sm max-w-xs">
+                        The leading platform for booking football pitches in Addis Ababa. Play more, worry less.
+                    </p>
+                    <div class="flex gap-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-telegram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-tiktok text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Company</h3>
+                    <ul class="space-y-2 text-xs md:text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-green transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Support</h3>
+                    <ul class="space-y-2 text-xs md:text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-8 md:mt-12 pt-6 md:pt-8 text-center text-gray-500 text-xs md:text-sm">
+                &copy; 2024 AddisPitch. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Pitch Data with coordinates
+        const pitches = [
+            {
+                id: 1,
+                name: "Bole Champions Arena",
+                location: "Bole, Addis Ababa",
+                price: 1500,
+                rating: 4.8,
+                reviews: 124,
+                type: "7v7",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png",
+                features: ["Night Lights", "Showers", "Parking"],
+                lat: 8.9806,
+                lng: 38.7578
+            },
+            {
+                id: 2,
+                name: "Kazanchis Turf Club",
+                location: "Kazanchis, Addis Ababa",
+                price: 1200,
+                rating: 4.5,
+                reviews: 89,
+                type: "5v5",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/155d58e1b-5dcc-4668-8e6a-bc66d4a9c846.png",
+                features: ["Cafe", "Locker Rooms"],
+                lat: 9.0192,
+                lng: 38.7625
+            },
+            {
+                id: 3,
+                name: "Adwa Museum Indoor Court",
+                location: "Adwa Museum, Addis Ababa",
+                price: 2000,
+                rating: 4.9,
+                reviews: 210,
+                type: "5v5 Indoor",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/14944ddf7-9087-4272-8a67-02d19eee6ec4.png",
+                features: ["AC", "Spectator Seats", "Pro Turf"],
+                lat: 9.0054,
+                lng: 38.7636
+            },
+            {
+                id: 4,
+                name: "Piassa Street Field",
+                location: "Piassa, Addis Ababa",
+                price: 800,
+                rating: 4.2,
+                reviews: 56,
+                type: "5v5",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/155d58e1b-5dcc-4668-8e6a-bc66d4a9c846.png",
+                features: ["Budget Friendly", "Open Air"],
+                lat: 9.0348,
+                lng: 38.7469
+            },
+            {
+                id: 5,
+                name: "Sarbet Sports Complex",
+                location: "Sarbet, Addis Ababa",
+                price: 1800,
+                rating: 4.7,
+                reviews: 150,
+                type: "7v7",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png",
+                features: ["Floodlights", "Water Available", "Night Lights"],
+                lat: 9.0157,
+                lng: 38.7925
+            },
+            {
+                id: 6,
+                name: "Megenagna Green Zone",
+                location: "Megenagna, Addis Ababa",
+                price: 1350,
+                rating: 4.6,
+                reviews: 92,
+                type: "5v5",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/14944ddf7-9087-4272-8a67-02d19eee6ec4.png",
+                features: ["Secure Parking", "Snack Bar", "Showers"],
+                lat: 9.0157,
+                lng: 38.7925
+            },
+            {
+                id: 7,
+                name: "CMC Sports Arena",
+                location: "CMC, Addis Ababa",
+                price: 1600,
+                rating: 4.7,
+                reviews: 178,
+                type: "7v7",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png",
+                features: ["Night Lights", "Parking", "Cafe"],
+                lat: 9.0100,
+                lng: 38.7800
+            },
+            {
+                id: 8,
+                name: "Hayat Football Center",
+                location: "Hayat, Addis Ababa",
+                price: 1400,
+                rating: 4.5,
+                reviews: 134,
+                type: "5v5",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/155d58e1b-5dcc-4668-8e6a-bc66d4a9c846.png",
+                features: ["Showers", "Locker Rooms", "Parking"],
+                lat: 9.0250,
+                lng: 38.7700
+            },
+            {
+                id: 9,
+                name: "Gotera Stadium",
+                location: "Gotera, Addis Ababa",
+                price: 1100,
+                rating: 4.3,
+                reviews: 98,
+                type: "7v7",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/14944ddf7-9087-4272-8a67-02d19eee6ec4.png",
+                features: ["Night Lights", "Water Available"],
+                lat: 9.0000,
+                lng: 38.7500
+            },
+            {
+                id: 10,
+                name: "Arat Kilo Pitch",
+                location: "Arat Kilo, Addis Ababa",
+                price: 1300,
+                rating: 4.4,
+                reviews: 112,
+                type: "5v5",
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png",
+                features: ["Parking", "Snack Bar"],
+                lat: 9.0400,
+                lng: 38.7600
+            }
+        ];
+
+        // Tournament Data
+        const tournaments = [
+            {
+                id: 1,
+                name: "Addis Premier League",
+                ageGroup: "Adult (21+)",
+                gender: "Men",
+                format: "7v7",
+                startDate: "2024-02-01",
+                endDate: "2024-04-30",
+                teams: 16,
+                prize: "ETB 50,000",
+                registrationFee: 5000,
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png"
+            },
+            {
+                id: 2,
+                name: "Youth Championship U-17",
+                ageGroup: "U-17",
+                gender: "Men",
+                format: "5v5",
+                startDate: "2024-01-15",
+                endDate: "2024-03-15",
+                teams: 12,
+                prize: "ETB 20,000",
+                registrationFee: 3000,
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/155d58e1b-5dcc-4668-8e6a-bc66d4a9c846.png"
+            },
+            {
+                id: 3,
+                name: "Women's Football Cup",
+                ageGroup: "Adult (21+)",
+                gender: "Women",
+                format: "7v7",
+                startDate: "2024-03-01",
+                endDate: "2024-05-30",
+                teams: 10,
+                prize: "ETB 30,000",
+                registrationFee: 4000,
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/14944ddf7-9087-4272-8a67-02d19eee6ec4.png"
+            },
+            {
+                id: 4,
+                name: "Masters League 35+",
+                ageGroup: "Masters (35+)",
+                gender: "Men",
+                format: "5v5",
+                startDate: "2024-02-15",
+                endDate: "2024-04-15",
+                teams: 8,
+                prize: "ETB 15,000",
+                registrationFee: 2500,
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/19e7f101d-470a-4539-9710-a490322a2f90.png"
+            },
+            {
+                id: 5,
+                name: "Mixed Gender Fun League",
+                ageGroup: "Adult (21+)",
+                gender: "Mixed",
+                format: "5v5",
+                startDate: "2024-01-20",
+                endDate: "2024-03-20",
+                teams: 14,
+                prize: "ETB 10,000",
+                registrationFee: 3500,
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/155d58e1b-5dcc-4668-8e6a-bc66d4a9c846.png"
+            },
+            {
+                id: 6,
+                name: "U-21 Development Cup",
+                ageGroup: "U-21",
+                gender: "Men",
+                format: "7v7",
+                startDate: "2024-02-10",
+                endDate: "2024-05-10",
+                teams: 16,
+                prize: "ETB 25,000",
+                registrationFee: 4500,
+                image: "https://image.qwenlm.ai/public_source/26a7a329-ecc5-4b3d-ad99-e624adf5d751/14944ddf7-9087-4272-8a67-02d19eee6ec4.png"
+            }
+        ];
+
+        // State variables
+        let selectedPitch = null;
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedTournament = null;
+        let currentDuration = 1;
+        let activeFilters = [];
+        let activeTournamentFilters = [];
+        let map = null;
+        let routeModalMap = null;
+        let homeCalendar = null;
+        let bookingCalendar = null;
+        let bookingData = {};
+        let tournamentRegistrationData = {};
+        let userBookings = [];
+        let qrCodeObj = null;
+        let tournamentQrCodeObj = null;
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'success' ? 'fa-circle-check text-brand-green' : 'fa-circle-xmark text-red-500'}"></i>
+                <span class="text-white text-sm">${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Navigation
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page + '-page').classList.add('active');
+            window.scrollTo(0, 0);
+            
+            if (page === 'location') {
+                setTimeout(() => initMap(), 100);
+            }
+            if (page === 'bookings') {
+                renderBookings();
+            }
+        }
+
+        // Toggle Mobile Menu
+       function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-overlay');
+    menu.classList.toggle('open');
+    overlay.classList.toggle('hidden');
+    
+    // Prevent the background from scrolling when menu is open
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+        // Filter Pitches
+        function filterPitches(filter) {
+            // Update active state on buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                btn.classList.add('bg-brand-card', 'text-gray-300', 'border-white/10');
+            });
+            event.target.classList.remove('bg-brand-card', 'text-gray-300', 'border-white/10');
+            event.target.classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+
+            if (filter === 'all') {
+                activeFilters = [];
+            } else if (filter === '5v5' || filter === '7v7') {
+                activeFilters = activeFilters.filter(f => !f.startsWith('5v5') && !f.startsWith('7v7'));
+                activeFilters.push(filter);
+            } else if (filter === 'Indoor') {
+                if (activeFilters.includes('Indoor')) {
+                    activeFilters = activeFilters.filter(f => f !== 'Indoor');
+                } else {
+                    activeFilters.push('Indoor');
+                }
+            } else {
+                // Feature filters (Night Lights, Parking, Showers)
+                if (activeFilters.includes(filter)) {
+                    activeFilters = activeFilters.filter(f => f !== filter);
+                } else {
+                    activeFilters.push(filter);
+                }
+            }
+
+            applyFilters();
+        }
+
+        // Apply Filters
+        function applyFilters() {
+            let filtered = [...pitches];
+
+            // Apply type filters
+            if (activeFilters.includes('5v5')) {
+                filtered = filtered.filter(p => p.type.includes('5v5'));
+            }
+            if (activeFilters.includes('7v7')) {
+                filtered = filtered.filter(p => p.type.includes('7v7'));
+            }
+            if (activeFilters.includes('Indoor')) {
+                filtered = filtered.filter(p => p.type.includes('Indoor'));
+            }
+
+            // Apply feature filters
+            activeFilters.forEach(filter => {
+                if (!['5v5', '7v7', 'Indoor'].includes(filter)) {
+                    filtered = filtered.filter(p => p.features.some(f => f.toLowerCase().includes(filter.toLowerCase())));
+                }
+            });
+
+            document.getElementById('filter-count').textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                document.getElementById('pitch-container').classList.add('hidden');
+                document.getElementById('no-results').classList.remove('hidden');
+            } else {
+                document.getElementById('pitch-container').classList.remove('hidden');
+                document.getElementById('no-results').classList.add('hidden');
+                renderPitches('pitch-container', filtered);
+            }
+        }
+
+        // Clear Filters
+        function clearFilters() {
+            activeFilters = [];
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                if (btn.textContent.trim() === 'All') {
+                    btn.classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                } else {
+                    btn.classList.add('bg-brand-card', 'text-gray-300', 'border-white/10');
+                }
+            });
+            document.getElementById('filter-count').textContent = pitches.length;
+            document.getElementById('pitch-container').classList.remove('hidden');
+            document.getElementById('no-results').classList.add('hidden');
+            renderPitches('pitch-container', pitches);
+            showToast('Filters cleared', 'success');
+        }
+
+        // Sort Pitches
+        function sortPitches(sortBy) {
+            let filtered = [...pitches];
+            
+            // Apply current filters first
+            if (activeFilters.includes('5v5')) {
+                filtered = filtered.filter(p => p.type.includes('5v5'));
+            }
+            if (activeFilters.includes('7v7')) {
+                filtered = filtered.filter(p => p.type.includes('7v7'));
+            }
+            if (activeFilters.includes('Indoor')) {
+                filtered = filtered.filter(p => p.type.includes('Indoor'));
+            }
+            activeFilters.forEach(filter => {
+                if (!['5v5', '7v7', 'Indoor'].includes(filter)) {
+                    filtered = filtered.filter(p => p.features.some(f => f.toLowerCase().includes(filter.toLowerCase())));
+                }
+            });
+
+            // Sort
+            switch(sortBy) {
+                case 'price-low':
+                    filtered.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filtered.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    filtered.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'popular':
+                default:
+                    filtered.sort((a, b) => b.reviews - a.reviews);
+            }
+
+            renderPitches('pitch-container', filtered);
+        }
+
+        // Filter Tournaments
+        function filterTournaments(filter) {
+            document.querySelectorAll('.tournament-filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                btn.classList.add('bg-brand-card', 'text-gray-300', 'border-white/10');
+            });
+            event.target.classList.remove('bg-brand-card', 'text-gray-300', 'border-white/10');
+            event.target.classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+
+            if (filter === 'all') {
+                activeTournamentFilters = [];
+            } else {
+                if (activeTournamentFilters.includes(filter)) {
+                    activeTournamentFilters = activeTournamentFilters.filter(f => f !== filter);
+                } else {
+                    activeTournamentFilters.push(filter);
+                }
+            }
+
+            applyTournamentFilters();
+        }
+
+        // Apply Tournament Filters
+        function applyTournamentFilters() {
+            let filtered = [...tournaments];
+
+            activeTournamentFilters.forEach(filter => {
+                if (filter.startsWith('U-') || filter === 'Adult' || filter === 'Masters') {
+                    filtered = filtered.filter(t => t.ageGroup.includes(filter));
+                } else {
+                    filtered = filtered.filter(t => t.gender.includes(filter));
+                }
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('tournaments-container').classList.add('hidden');
+                document.getElementById('tournament-no-results').classList.remove('hidden');
+            } else {
+                document.getElementById('tournaments-container').classList.remove('hidden');
+                document.getElementById('tournament-no-results').classList.add('hidden');
+                renderTournaments(filtered);
+            }
+        }
+
+        // Clear Tournament Filters
+        function clearTournamentFilters() {
+            activeTournamentFilters = [];
+            document.querySelectorAll('.tournament-filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                if (btn.textContent.trim() === 'All') {
+                    btn.classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                } else {
+                    btn.classList.add('bg-brand-card', 'text-gray-300', 'border-white/10');
+                }
+            });
+            document.getElementById('tournaments-container').classList.remove('hidden');
+            document.getElementById('tournament-no-results').classList.add('hidden');
+            renderTournaments(tournaments);
+            showToast('Filters cleared', 'success');
+        }
+
+        // Render Pitches
+        function renderPitches(containerId, pitchList = pitches) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = pitchList.map(pitch => `
+                <div class="pitch-card bg-brand-card rounded-2xl overflow-hidden border border-white/5 group cursor-pointer" onclick="openBooking(${pitch.id})">
+                    <div class="relative h-40 md:h-48 overflow-hidden">
+                        <img src="${pitch.image}" alt="${pitch.name}" class="card-img w-full h-full object-cover">
+                        <div class="absolute top-2 md:top-3 right-2 md:right-3 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1">
+                            <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-white text-xs font-bold">${pitch.rating}</span>
+                        </div>
+                        <div class="absolute bottom-2 md:bottom-3 left-2 md:left-3 bg-brand-green text-black text-xs font-bold px-2 py-1 rounded">
+                            ${pitch.type}
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5">
+                        <h3 class="text-base md:text-lg font-bold text-white group-hover:text-brand-green transition-colors">${pitch.name}</h3>
+                        <div class="flex items-center text-gray-400 text-xs md:text-sm mb-3 md:mb-4">
+                            <i class="fa-solid fa-location-dot mr-2 text-brand-green"></i>
+                            ${pitch.location}
+                        </div>
+                        <div class="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4">
+                            ${pitch.features.slice(0, 2).map(f => `<span class="text-xs bg-white/5 text-gray-300 px-2 py-1 rounded border border-white/5">${f}</span>`).join('')}
+                        </div>
+                        <div class="flex items-center justify-between pt-3 md:pt-4 border-t border-white/10">
+                            <div>
+                                <span class="text-xs text-gray-400 block">Price per hour</span>
+                                <span class="text-lg md:text-xl font-bold text-white">ETB ${pitch.price}</span>
+                            </div>
+                            <button class="bg-brand-green hover:bg-brand-greenDark text-black px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-semibold transition-all">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Tournaments
+        function renderTournaments(tournamentList = tournaments) {
+            const container = document.getElementById('tournaments-container');
+            if (!container) return;
+            
+            container.innerHTML = tournamentList.map(t => `
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 group">
+                    <div class="relative h-36 md:h-40 overflow-hidden">
+                        <img src="${t.image}" alt="${t.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                        <div class="absolute top-2 md:top-3 right-2 md:right-3 bg-brand-green text-black text-xs font-bold px-2 py-1 rounded">
+                            ${t.format}
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5">
+                        <h3 class="text-base md:text-lg font-bold text-white mb-2">${t.name}</h3>
+                        <div class="space-y-1 md:space-y-2 text-xs md:text-sm text-gray-400 mb-3 md:mb-4">
+                            <div class="flex justify-between">
+                                <span>Age Group:</span>
+                                <span class="text-white">${t.ageGroup}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Gender:</span>
+                                <span class="text-white">${t.gender}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Prize:</span>
+                                <span class="text-brand-green">${t.prize}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 md:pt-4 border-t border-white/10">
+                            <span class="text-xs text-gray-400">${t.startDate} - ${t.endDate}</span>
+                            <button onclick="openTournamentRegistration(${t.id})" class="bg-white/10 hover:bg-brand-green hover:text-black text-white px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-semibold transition-all">
+                                Register
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Bookings
+        function renderBookings() {
+            const container = document.getElementById('bookings-list');
+            const noBookings = document.getElementById('no-bookings');
+            
+            if (userBookings.length === 0) {
+                container.classList.add('hidden');
+                noBookings.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            noBookings.classList.add('hidden');
+
+            const now = new Date();
+            const upcoming = userBookings.filter(b => new Date(b.date) >= now);
+            const history = userBookings.filter(b => new Date(b.date) < now);
+
+            const bookings = document.getElementById('upcoming-tab').classList.contains('text-brand-green') ? upcoming : history;
+
+            if (bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fa-regular fa-calendar text-4xl text-gray-600 mb-3"></i>
+                        <p class="text-gray-400">No ${document.getElementById('upcoming-tab').classList.contains('text-brand-green') ? 'upcoming' : 'past'} bookings</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = bookings.map(b => `
+                <div class="bg-brand-black rounded-xl p-4 border border-white/10">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h4 class="font-bold text-white">${b.pitch.name}</h4>
+                            <p class="text-xs text-gray-400">${b.pitch.location}</p>
+                        </div>
+                        <span class="bg-brand-green/20 text-brand-green text-xs px-2 py-1 rounded">${b.status || 'Confirmed'}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-3">
+                        <div><i class="fa-regular fa-calendar mr-1"></i> ${new Date(b.date).toLocaleDateString()}</div>
+                        <div><i class="fa-regular fa-clock mr-1"></i> ${b.time}</div>
+                    </div>
+                    <div class="flex justify-between items-center pt-3 border-t border-white/10">
+                        <span class="text-brand-green font-bold">ETB ${b.total}</span>
+                        <button onclick="viewBookingQR('${b.bookingId}')" class="text-brand-green text-xs hover:underline">View QR Code</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showBookingTab(tab) {
+            const upcomingTab = document.getElementById('upcoming-tab');
+            const historyTab = document.getElementById('history-tab');
+            
+            if (tab === 'upcoming') {
+                upcomingTab.classList.add('text-brand-green', 'border-b-2', 'border-brand-green');
+                upcomingTab.classList.remove('text-gray-400');
+                historyTab.classList.remove('text-brand-green', 'border-b-2', 'border-brand-green');
+                historyTab.classList.add('text-gray-400');
+            } else {
+                historyTab.classList.add('text-brand-green', 'border-b-2', 'border-brand-green');
+                historyTab.classList.remove('text-gray-400');
+                upcomingTab.classList.remove('text-brand-green', 'border-b-2', 'border-brand-green');
+                upcomingTab.classList.add('text-gray-400');
+            }
+            renderBookings();
+        }
+
+        function viewBookingQR(bookingId) {
+            const booking = userBookings.find(b => b.bookingId === bookingId);
+            if (booking) {
+                bookingData = booking;
+                showQRCode();
+            }
+        }
+
+        // Open Tournament Registration
+        function openTournamentRegistration(tournamentId) {
+            selectedTournament = tournaments.find(t => t.id === tournamentId);
+            if (!selectedTournament) return;
+
+            document.getElementById('reg-tournament-image').src = selectedTournament.image;
+            document.getElementById('reg-tournament-name').textContent = selectedTournament.name;
+            document.getElementById('reg-format').textContent = selectedTournament.format;
+            document.getElementById('reg-age').textContent = selectedTournament.ageGroup;
+            document.getElementById('reg-gender').textContent = selectedTournament.gender;
+            document.getElementById('reg-prize').textContent = selectedTournament.prize;
+            document.getElementById('reg-fee').textContent = `ETB ${selectedTournament.registrationFee.toLocaleString()}`;
+            document.getElementById('reg-total-fee').textContent = `ETB ${selectedTournament.registrationFee.toLocaleString()}`;
+
+            document.getElementById('team-registration-form').reset();
+            document.getElementById('team-members-container').innerHTML = '';
+            
+            for (let i = 0; i < 5; i++) {
+                addTeamMember();
+            }
+
+            navigateTo('tournament-registration');
+        }
+
+        // Add Team Member
+        function addTeamMember() {
+            const container = document.getElementById('team-members-container');
+            const count = container.children.length + 1;
+            
+            if (count > 12) {
+                showToast('Maximum 12 players allowed', 'error');
+                return;
+            }
+
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'team-member-input grid grid-cols-3 gap-2 md:gap-3';
+            memberDiv.innerHTML = `
+                <input type="text" placeholder="Name" required class="col-span-2 bg-brand-black border border-white/10 rounded-xl py-2 md:py-3 px-3 text-white focus:outline-none focus:border-brand-green text-xs md:text-sm">
+                <input type="number" placeholder="#" min="1" max="99" required class="bg-brand-black border border-white/10 rounded-xl py-2 md:py-3 px-3 text-white focus:outline-none focus:border-brand-green text-xs md:text-sm">
+            `;
+            container.appendChild(memberDiv);
+        }
+
+        // Proceed to Tournament Payment
+        function proceedToTournamentPayment(event) {
+            event.preventDefault();
+
+            const teamName = document.getElementById('team-name').value.trim();
+            const teamCaptain = document.getElementById('team-captain').value.trim();
+            const teamPhone = document.getElementById('team-phone').value.trim();
+
+            if (!teamName || !teamCaptain || !teamPhone) {
+                showToast('Please fill in all team information', 'error');
+                return;
+            }
+
+            const memberInputs = document.querySelectorAll('#team-members-container input');
+            const teamMembers = [];
+            for (let i = 0; i < memberInputs.length; i += 2) {
+                const name = memberInputs[i].value.trim();
+                const number = memberInputs[i + 1].value.trim();
+                if (name && number) {
+                    teamMembers.push({ name, number });
+                }
+            }
+
+            if (teamMembers.length < 5) {
+                showToast('Minimum 5 players required', 'error');
+                return;
+            }
+
+            tournamentRegistrationData = {
+                tournament: selectedTournament,
+                teamName: teamName,
+                captain: teamCaptain,
+                phone: teamPhone,
+                players: teamMembers,
+                registrationId: 'TR-' + Date.now().toString(36).toUpperCase(),
+                fee: selectedTournament.registrationFee
+            };
+
+            document.getElementById('tp-tournament-name').textContent = selectedTournament.name;
+            document.getElementById('tp-team-name').textContent = teamName;
+            document.getElementById('tp-captain').textContent = teamCaptain;
+            document.getElementById('tp-players').textContent = teamMembers.length + ' players';
+            document.getElementById('tp-total').textContent = `ETB ${selectedTournament.registrationFee.toLocaleString()}`;
+            document.getElementById('tp-telebirr-phone').value = teamPhone;
+
+            document.getElementById('tp-pay-button').classList.remove('hidden');
+            document.getElementById('tp-payment-processing').classList.add('hidden');
+            document.getElementById('tp-payment-success').classList.add('hidden');
+
+            navigateTo('tournament-payment');
+        }
+
+        // Process Tournament Payment
+        function processTournamentPayment() {
+            const telebirrPhone = document.getElementById('tp-telebirr-phone').value.trim();
+            
+            if (!telebirrPhone) {
+                showToast('Please enter your Telebirr phone number', 'error');
+                return;
+            }
+
+            document.getElementById('tp-pay-button').classList.add('hidden');
+            document.getElementById('tp-payment-processing').classList.remove('hidden');
+
+            setTimeout(() => {
+                document.getElementById('tp-payment-processing').classList.add('hidden');
+                document.getElementById('tp-payment-success').classList.remove('hidden');
+                
+                tournamentRegistrationData.telebirrPhone = telebirrPhone;
+                tournamentRegistrationData.paymentStatus = 'completed';
+                showToast('Payment successful!', 'success');
+            }, 3000);
+        }
+
+        // Show Tournament QR
+        function showTournamentQR() {
+            document.getElementById('tournament-qr-code').innerHTML = '';
+
+            const qrData = JSON.stringify({
+                registrationId: tournamentRegistrationData.registrationId,
+                tournament: tournamentRegistrationData.tournament.name,
+                team: tournamentRegistrationData.teamName,
+                captain: tournamentRegistrationData.captain,
+                players: tournamentRegistrationData.players.length
+            });
+
+            tournamentQrCodeObj = new QRCode(document.getElementById('tournament-qr-code'), {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('tqr-reg-id').textContent = tournamentRegistrationData.registrationId;
+            document.getElementById('tqr-tournament').textContent = tournamentRegistrationData.tournament.name;
+            document.getElementById('tqr-team').textContent = tournamentRegistrationData.teamName;
+            document.getElementById('tqr-captain').textContent = tournamentRegistrationData.captain;
+            document.getElementById('tqr-players').textContent = tournamentRegistrationData.players.length + ' players';
+
+            navigateTo('tournament-qr');
+        }
+
+        // Download Tournament QR
+        function downloadTournamentQR() {
+            const qrCanvas = document.querySelector('#tournament-qr-code canvas');
+            if (qrCanvas) {
+                const link = document.createElement('a');
+                link.download = `AddisPitch-Tournament-${tournamentRegistrationData.registrationId}.png`;
+                link.href = qrCanvas.toDataURL('image/png');
+                link.click();
+                showToast('QR code downloaded', 'success');
+            }
+        }
+
+        // Share Tournament QR
+        function shareTournamentQR() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Tournament Registration Confirmation',
+                    text: `Registration ID: ${tournamentRegistrationData.registrationId}\nTournament: ${tournamentRegistrationData.tournament.name}\nTeam: ${tournamentRegistrationData.teamName}`,
+                    url: window.location.href
+                });
+            } else {
+                showToast('Share not supported. Download instead.', 'error');
+            }
+        }
+
+        // Open Booking Page
+        function openBooking(pitchId) {
+            selectedPitch = pitches.find(p => p.id === pitchId);
+            if (!selectedPitch) return;
+
+            document.getElementById('booking-pitch-image').src = selectedPitch.image;
+            document.getElementById('booking-pitch-name').textContent = selectedPitch.name;
+            document.getElementById('booking-pitch-location').innerHTML = `<i class="fa-solid fa-location-dot mr-2"></i> ${selectedPitch.location}`;
+            document.getElementById('booking-pitch-price').innerHTML = `ETB ${selectedPitch.price}<span class="text-sm text-gray-400 font-normal">/hour</span>`;
+            
+            generateTimeSlots();
+            navigateTo('booking');
+        }
+
+        // Generate Time Slots
+        function generateTimeSlots() {
+            const container = document.getElementById('time-slots-container');
+            const times = ['16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
+            const unavailable = ['17:00', '18:30', '20:00'];
+
+            container.innerHTML = times.map(time => {
+                const isUnavailable = unavailable.includes(time);
+                const isSelected = selectedTime === time;
+                return `
+                    <button onclick="selectTimeSlot('${time}')" 
+                        class="time-slot py-2 md:py-3 px-1 md:px-2 rounded-lg border ${isUnavailable ? 'unavailable' : isSelected ? 'selected' : 'border-white/10 bg-brand-black'} text-xs md:text-sm font-medium"
+                        ${isUnavailable ? 'disabled' : ''}>
+                        ${time}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Select Time Slot
+        function selectTimeSlot(time) {
+            selectedTime = time;
+            generateTimeSlots();
+            updateSummary();
+        }
+
+        // Select Duration
+        function selectDuration(hours) {
+            currentDuration = hours;
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+                btn.classList.add('bg-brand-black', 'text-white', 'border-white/10');
+            });
+            event.target.classList.remove('bg-brand-black', 'text-white', 'border-white/10');
+            event.target.classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+            updateSummary();
+        }
+
+        // Calendar Functions
+        function initCalendars() {
+            const today = new Date();
+            
+            homeCalendar = {
+                currentDate: new Date(today),
+                selectedDate: null
+            };
+            
+            bookingCalendar = {
+                currentDate: new Date(today),
+                selectedDate: null
+            };
+        }
+
+        function renderCalendar(calendarId, calendarObj) {
+            const year = calendarObj.currentDate.getFullYear();
+            const month = calendarObj.currentDate.getMonth();
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startingDay = firstDay.getDay();
+            const totalDays = lastDay.getDate();
+            
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            let html = `
+                <div class="flex items-center justify-between mb-3 md:mb-4">
+                    <button onclick="changeMonth('${calendarId}', -1)" class="p-2 hover:bg-white/10 rounded">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <span class="font-bold text-sm md:text-base">${monthNames[month]} ${year}</span>
+                    <button onclick="changeMonth('${calendarId}', 1)" class="p-2 hover:bg-white/10 rounded">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center text-xs text-gray-400 mb-2">
+                    <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                </div>
+                <div class="grid grid-cols-7 gap-1">
+            `;
+            
+            for (let i = 0; i < startingDay; i++) {
+                html += `<div></div>`;
+            }
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            for (let day = 1; day <= totalDays; day++) {
+                const date = new Date(year, month, day);
+                const isPast = date < today;
+                const isSelected = calendarObj.selectedDate && 
+                    date.toDateString() === calendarObj.selectedDate.toDateString();
+                
+                html += `
+                    <button onclick="selectDate('${calendarId}', ${year}, ${month}, ${day})" 
+                        class="p-1 md:p-2 text-xs md:text-sm rounded hover:bg-white/10 ${isSelected ? 'bg-brand-green text-black' : ''} ${isPast ? 'opacity-30 cursor-not-allowed' : ''}"
+                        ${isPast ? 'disabled' : ''}>
+                        ${day}
+                    </button>
+                `;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+
+        function changeMonth(calendarId, delta) {
+            const cal = calendarId === 'home' ? homeCalendar : bookingCalendar;
+            cal.currentDate.setMonth(cal.currentDate.getMonth() + delta);
+            
+            if (calendarId === 'home') {
+                document.getElementById('home-calendar').innerHTML = renderCalendar('home', homeCalendar);
+            } else {
+                document.getElementById('booking-calendar').innerHTML = renderCalendar('booking', bookingCalendar);
+            }
+        }
+
+        function selectDate(calendarId, year, month, day) {
+            const cal = calendarId === 'home' ? homeCalendar : bookingCalendar;
+            cal.selectedDate = new Date(year, month, day);
+            
+            const dateStr = cal.selectedDate.toLocaleDateString('en-US', { 
+                weekday: 'short', 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            if (calendarId === 'home') {
+                document.getElementById('home-calendar').innerHTML = renderCalendar('home', homeCalendar);
+                document.getElementById('home-date-input').value = dateStr;
+                toggleCalendar('home');
+            } else {
+                document.getElementById('booking-calendar').innerHTML = renderCalendar('booking', bookingCalendar);
+                document.getElementById('booking-date-display').innerHTML = `<i class="fa-regular fa-calendar mr-3"></i> ${dateStr}`;
+                selectedDate = cal.selectedDate;
+                toggleCalendar('booking');
+                updateSummary();
+            }
+        }
+
+        function toggleCalendar(type) {
+            const dropdown = document.getElementById(type + '-calendar-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Update Booking Summary
+        function updateSummary() {
+            if (selectedDate) {
+                document.getElementById('summary-date').textContent = selectedDate.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+            }
+            document.getElementById('summary-time').textContent = selectedTime || '-';
+            document.getElementById('summary-duration').textContent = currentDuration + ' Hour' + (currentDuration > 1 ? 's' : '');
+            
+            const totalPrice = selectedPitch ? selectedPitch.price * currentDuration : 0;
+            document.getElementById('summary-price').textContent = `ETB ${selectedPitch?.price || 0}`;
+            document.getElementById('summary-total').textContent = `ETB ${totalPrice}`;
+        }
+
+        // Proceed to Payment
+        function proceedToPayment() {
+            const name = document.getElementById('booking-name').value.trim();
+            const phone = document.getElementById('booking-phone').value.trim();
+
+            if (!selectedDate || !selectedTime) {
+                showToast('Please select a date and time slot', 'error');
+                return;
+            }
+
+            if (!name || !phone) {
+                showToast('Please fill in your name and phone number', 'error');
+                return;
+            }
+
+            const totalPrice = selectedPitch.price * currentDuration;
+
+            bookingData = {
+                pitch: selectedPitch,
+                date: selectedDate,
+                time: selectedTime,
+                name: name,
+                phone: phone,
+                email: document.getElementById('booking-email').value.trim(),
+                bookingId: 'AP-' + Date.now().toString(36).toUpperCase(),
+                duration: currentDuration,
+                total: totalPrice,
+                status: 'Confirmed'
+            };
+
+            document.getElementById('payment-pitch-name').textContent = selectedPitch.name;
+            document.getElementById('payment-datetime').textContent = selectedDate.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            }) + ' at ' + selectedTime;
+            document.getElementById('payment-duration').textContent = currentDuration + ' Hour' + (currentDuration > 1 ? 's' : '');
+            document.getElementById('payment-customer').textContent = name;
+            document.getElementById('payment-total').textContent = `ETB ${totalPrice}`;
+            document.getElementById('telebirr-phone').value = phone;
+
+            document.getElementById('pay-button').classList.remove('hidden');
+            document.getElementById('payment-processing').classList.add('hidden');
+            document.getElementById('payment-success').classList.add('hidden');
+
+            navigateTo('payment');
+        }
+
+        // Process Payment
+        function processPayment() {
+            const telebirrPhone = document.getElementById('telebirr-phone').value.trim();
+            
+            if (!telebirrPhone) {
+                showToast('Please enter your Telebirr phone number', 'error');
+                return;
+            }
+
+            document.getElementById('pay-button').classList.add('hidden');
+            document.getElementById('payment-processing').classList.remove('hidden');
+
+            setTimeout(() => {
+                document.getElementById('payment-processing').classList.add('hidden');
+                document.getElementById('payment-success').classList.remove('hidden');
+                
+                bookingData.telebirrPhone = telebirrPhone;
+                bookingData.paymentStatus = 'completed';
+                
+                // Add to user bookings
+                userBookings.push(bookingData);
+                
+                showToast('Payment successful!', 'success');
+            }, 3000);
+        }
+
+        // Show QR Code
+        function showQRCode() {
+            document.getElementById('qr-code').innerHTML = '';
+
+            const qrData = JSON.stringify({
+                bookingId: bookingData.bookingId,
+                pitch: bookingData.pitch.name,
+                date: bookingData.date.toLocaleDateString('en-US'),
+                time: bookingData.time,
+                customer: bookingData.name,
+                phone: bookingData.phone
+            });
+
+            qrCodeObj = new QRCode(document.getElementById('qr-code'), {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('qr-booking-id').textContent = bookingData.bookingId;
+            document.getElementById('qr-pitch-name').textContent = bookingData.pitch.name;
+            document.getElementById('qr-date').textContent = bookingData.date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            document.getElementById('qr-time').textContent = bookingData.time;
+            document.getElementById('qr-customer').textContent = bookingData.name;
+            document.getElementById('qr-phone').textContent = bookingData.phone;
+
+            navigateTo('qr');
+        }
+
+        // Download QR Code
+        function downloadQR() {
+            const qrCanvas = document.querySelector('#qr-code canvas');
+            if (qrCanvas) {
+                const link = document.createElement('a');
+                link.download = `AddisPitch-${bookingData.bookingId}.png`;
+                link.href = qrCanvas.toDataURL('image/png');
+                link.click();
+                showToast('QR code downloaded', 'success');
+            }
+        }
+
+        // Share QR Code
+        function shareQR() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Pitch Booking Confirmation',
+                    text: `Booking ID: ${bookingData.bookingId}\nPitch: ${bookingData.pitch.name}\nDate: ${bookingData.date.toLocaleDateString()}\nTime: ${bookingData.time}`,
+                    url: window.location.href
+                });
+            } else {
+                showToast('Share not supported. Download instead.', 'error');
+            }
+        }
+
+        // Find Near Me
+        function findNearMe() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        
+                        const nearbyPitches = pitches.map(p => {
+                            const distance = calculateDistance(userLat, userLng, p.lat, p.lng);
+                            return { ...p, distance };
+                        }).sort((a, b) => a.distance - b.distance);
+                        
+                        showToast(`Found ${nearbyPitches.length} pitches near you!`, 'success');
+                        navigateTo('location');
+                        setTimeout(() => {
+                            initMap(userLat, userLng, nearbyPitches);
+                        }, 500);
+                    },
+                    (error) => {
+                        showToast('Unable to get location. Please enable GPS.', 'error');
+                        navigateTo('location');
+                        setTimeout(() => initMap(), 500);
+                    }
+                );
+            } else {
+                showToast('Geolocation not supported', 'error');
+                navigateTo('location');
+                setTimeout(() => initMap(), 500);
+            }
+        }
+
+        // Calculate Distance
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return (R * c).toFixed(2);
+        }
+
+        // Initialize Map
+        function initMap(userLat = 9.03, userLng = 38.74, pitchList = pitches) {
+            if (map) {
+                map.remove();
+            }
+            
+            map = L.map('map-container').setView([userLat, userLng], 12);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                className: 'dark-map'
+            }).addTo(map);
+
+            L.marker([userLat, userLng]).addTo(map)
+                .bindPopup('<b>Your Location</b>')
+                .openPopup();
+
+            updateLocationPitchList(pitchList);
+
+            pitchList.forEach(pitch => {
+                L.marker([pitch.lat, pitch.lng]).addTo(map)
+                    .bindPopup(`
+                        <div class="text-black">
+                            <b>${pitch.name}</b><br>
+                            ${pitch.location}<br>
+                            ETB ${pitch.price}/hour
+                        </div>
+                    `);
+            });
+        }
+
+        // Update Location Pitch List
+        function updateLocationPitchList(pitchList) {
+            const container = document.getElementById('location-pitch-list');
+            if (!container) return;
+
+            container.innerHTML = pitchList.map((pitch, index) => `
+                <div onclick="selectPitchOnMap(${index})" class="p-3 bg-brand-black rounded-xl border border-white/10 cursor-pointer hover:border-brand-green transition-all">
+                    <h4 class="font-semibold text-white text-sm md:text-base">${pitch.name}</h4>
+                    <p class="text-xs md:text-sm text-gray-400">${pitch.location}</p>
+                    <p class="text-xs md:text-sm text-brand-green mt-1">${pitch.distance ? pitch.distance + ' km away' : ''}</p>
+                </div>
+            `).join('');
+        }
+
+        // Filter Pitches by Location
+        function filterPitchesByLocation() {
+            const searchTerm = document.getElementById('location-search-input').value.toLowerCase();
+            const filtered = pitches.filter(p => 
+                p.location.toLowerCase().includes(searchTerm) || 
+                p.name.toLowerCase().includes(searchTerm)
+            );
+            updateLocationPitchList(filtered);
+        }
+
+        function selectPitchOnMap(index) {
+            const searchTerm = document.getElementById('location-search-input').value.toLowerCase();
+            const filtered = pitches.filter(p => 
+                p.location.toLowerCase().includes(searchTerm) || 
+                p.name.toLowerCase().includes(searchTerm)
+            );
+            const pitch = filtered[index] || pitches[index];
+            showRouteMap(pitch);
+        }
+
+        // Show Route Map
+        function showRouteMap(pitch = selectedPitch) {
+            if (!pitch) return;
+            
+            document.getElementById('route-modal').classList.remove('hidden');
+            
+            setTimeout(() => {
+                if (routeModalMap) {
+                    routeModalMap.remove();
+                }
+                
+                routeModalMap = L.map('route-map-container').setView([pitch.lat, pitch.lng], 14);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(routeModalMap);
+
+                L.marker([pitch.lat, pitch.lng]).addTo(routeModalMap)
+                    .bindPopup(`<b>${pitch.name}</b><br>${pitch.location}`)
+                    .openPopup();
+
+                document.getElementById('google-maps-btn').href = 
+                    `https://www.google.com/maps/dir/?api=1&destination=${pitch.lat},${pitch.lng}`;
+            }, 100);
+        }
+
+        function closeRouteModal() {
+            document.getElementById('route-modal').classList.add('hidden');
+        }
+
+        // Auth Tab Switching
+        function switchAuthTab(tab) {
+            const signinForm = document.getElementById('signin-form');
+            const signupForm = document.getElementById('signup-form');
+            const signinTab = document.getElementById('signin-tab');
+            const signupTab = document.getElementById('signup-tab');
+            
+            if (tab === 'signin') {
+                signinForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                signinTab.classList.add('text-brand-green', 'border-b-2', 'border-brand-green');
+                signinTab.classList.remove('text-gray-400');
+                signupTab.classList.remove('text-brand-green', 'border-b-2', 'border-brand-green');
+                signupTab.classList.add('text-gray-400');
+            } else {
+                signinForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                signupTab.classList.add('text-brand-green', 'border-b-2', 'border-brand-green');
+                signupTab.classList.remove('text-gray-400');
+                signinTab.classList.remove('text-brand-green', 'border-b-2', 'border-brand-green');
+                signinTab.classList.add('text-gray-400');
+            }
+        }
+
+        // Handle Sign In
+        function handleSignIn(event) {
+            event.preventDefault();
+            const phone = document.getElementById('signin-phone').value.trim();
+            const password = document.getElementById('signin-password').value.trim();
+            
+            if (!phone || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            showToast('Signed in successfully!', 'success');
+            navigateTo('home');
+        }
+
+        // Handle Sign Up
+        function handleSignUp(event) {
+            event.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const phone = document.getElementById('signup-phone').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+            const confirmPassword = document.getElementById('signup-confirm-password').value.trim();
+            
+            if (!name || !phone || !password) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            showToast('Account created successfully!', 'success');
+            navigateTo('home');
+        }
+
+        // Search Pitches
+        function searchPitches() {
+            const location = document.getElementById('home-location-search').value.toLowerCase();
+            const filtered = pitches.filter(p => 
+                p.location.toLowerCase().includes(location) || 
+                p.name.toLowerCase().includes(location)
+            );
+            
+            if (filtered.length > 0) {
+                renderPitches('pitch-container', filtered);
+                showToast(`Found ${filtered.length} pitches`, 'success');
+            } else {
+                showToast('No pitches found in that location', 'error');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPitches('pitch-container');
+            renderTournaments();
+            initCalendars();
+            
+            document.getElementById('home-calendar').innerHTML = renderCalendar('home', homeCalendar);
+            document.getElementById('booking-calendar').innerHTML = renderCalendar('booking', bookingCalendar);
+            
+            // Set default filter button as active
+            document.querySelector('.filter-btn').classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+            document.querySelector('.tournament-filter-btn').classList.add('active', 'bg-brand-green', 'text-black', 'border-brand-green');
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.calendar-dropdown') && !e.target.closest('#home-date-input') && !e.target.closest('#booking-date-display')) {
+                document.getElementById('home-calendar-dropdown')?.classList.add('hidden');
+                document.getElementById('booking-calendar-dropdown')?.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
+
