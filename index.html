@@ -1131,47 +1131,77 @@ input, button {
     <div id="toast-container"></div>
 
     <!-- Footer -->
-    <footer class="bg-brand-dark border-t border-white/10 mt-auto py-8 md:py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center gap-2 mb-3 md:mb-4">
-                        <i class="fa-solid fa-futbol text-brand-green text-xl md:text-2xl"></i>
-                        <span class="text-lg md:text-xl font-bold text-white">Addis<span class="text-brand-green">Pitch</span></span>
+   <footer class="bg-brand-black border-t border-white/10 pt-16 pb-8 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            
+            <div class="col-span-1 md:col-span-1 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
+                    <div class="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center">
+                        <i class="fa-solid fa-futbol text-black"></i>
                     </div>
-                    <p class="text-gray-400 text-xs md:text-sm max-w-xs">
-                        The leading platform for booking football pitches in Addis Ababa. Play more, worry less.
-                    </p>
-                  <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 border-t border-white/10 pt-12">
-    <div class="space-y-4">
-        <h4 class="text-white font-bold">Company</h4>
-        <ul class="space-y-2 text-gray-400 text-sm">
-            <li><a href="javascript:void(0)" onclick="navigateTo('about')" class="hover:text-brand-green transition-colors">About Us</a></li>
-            <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact</a></li>
-        </ul>
-    </div>
+                    <span class="text-xl font-bold text-white tracking-tight">Addis<span class="text-brand-green">Pitch</span></span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    The #1 digital booking platform for football pitches in Addis Ababa. Search, book, and play.
+                </p>
+                <div class="flex justify-center md:justify-start gap-4">
+                    <a href="https://www.facebook.com/divineburger" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://t.me/divineburger_" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                    <a href="https://www.instagram.com/divineburger_" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@divineburger_" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
 
-    <div class="space-y-4">
-        <h4 class="text-white font-bold">Platform</h4>
-        <ul class="space-y-2 text-gray-400 text-sm">
-            <li><a href="javascript:void(0)" onclick="navigateTo('home')" class="hover:text-brand-green transition-colors">Find Pitches</a></li>
-            <li><a href="javascript:void(0)" onclick="navigateTo('tournaments')" class="hover:text-brand-green transition-colors">Tournaments</a></li>
-        </ul>
-    </div>
-    
-    <div class="space-y-4">
-        <h4 class="text-white font-bold">Support</h4>
-        <ul class="space-y-2 text-gray-400 text-sm">
-            <li><a href="#" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
-            <li><a href="#" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
-        </ul>
-    </div>
-</div>
-            <div class="border-t border-white/10 mt-8 md:mt-12 pt-6 md:pt-8 text-center text-gray-500 text-xs md:text-sm">
-                &copy; 2026 AddisPitch. All rights reserved.
+            <div class="text-center md:text-left">
+                <h4 class="text-white font-bold mb-6">Company</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="javascript:void(0)" onclick="navigateTo('home')" class="hover:text-brand-green transition-colors">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateTo('about')" class="hover:text-brand-green transition-colors">About Us</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="text-center md:text-left">
+                <h4 class="text-white font-bold mb-6">Platform</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="javascript:void(0)" onclick="navigateTo('tournaments')" class="hover:text-brand-green transition-colors">Tournaments</a></li>
+                    <li><a href="#" class="hover:text-brand-green transition-colors">List Your Pitch</a></li>
+                    <li><a href="#" class="hover:text-brand-green transition-colors">How it Works</a></li>
+                </ul>
+            </div>
+
+            <div class="text-center md:text-left">
+                <h4 class="text-white font-bold mb-6">Legal</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-brand-green transition-colors">Refund Policy</a></li>
+                </ul>
             </div>
         </div>
-    </footer>
+
+        <div class="pt-8 border-t border-white/5">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm text-center md:text-left">
+                    2026 AddisPitch. All rights reserved.
+                </p>
+                <div class="flex items-center gap-2 text-gray-500 text-sm">
+                    <span>Powered by</span>
+                    <span class="text-white font-medium italic">Divine Digital</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
     <script>
         // Pitch Data with coordinates
