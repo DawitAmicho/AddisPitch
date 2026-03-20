@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AddisPitch | Book Your Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -100,16 +99,10 @@
             display: block;
         }
         #map-container {
-    height: 250px; /* Shorter for mobile */
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    #map-container {
-        height: 400px; /* Full size for desktop */
-    }
-}
+            height: 400px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
         .leaflet-container {
             background: #1a1a1a;
         }
@@ -150,17 +143,6 @@
             border-color: #10b981;
         }
         @media (max-width: 768px) {
-            /* Inside the @media (max-width: 768px) block */
-.hero-title {
-    font-size: 1.75rem !important; /* Smaller header for mobile phones */
-    line-height: 1.2;
-}
-.search-container {
-    padding: 1rem !important; /* Tighten search bar padding */
-}
-input, button {
-    font-size: 16px !important; /* Prevents iOS from auto-zooming when typing */
-}
             .hero-title {
                 font-size: 2rem;
             }
@@ -201,8 +183,7 @@ input, button {
                 opacity: 1;
             }
         }
- .hide-scrollbar::-webkit-scrollbar { display: none; }
-.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }   </style>
+    </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
@@ -217,9 +198,7 @@ input, button {
                 <div class="hidden md:block">
     <div class="ml-10 flex items-baseline space-x-8">
         <a href="#" onclick="navigateTo('home')" class="text-white hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-        
         <a href="about.html" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">About Us</a>
-        
         <a href="#" onclick="navigateTo('tournaments')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Tournaments</a>
         <a href="#" onclick="navigateTo('location')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Location</a>
         <a href="#" onclick="navigateTo('bookings')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">My Bookings</a>
@@ -238,22 +217,21 @@ input, button {
     </nav>
 
     <!-- Mobile Menu -->
-     <div id="mobile-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden" onclick="toggleMobileMenu()"></div>
     <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-brand-card z-50 border-l border-white/10 md:hidden">
-        <div class="p-4">
-            <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white mb-6">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-          <div class="space-y-4">
-    <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-white hover:text-brand-green py-2">Home</a>
-    <a href="about.html" class="block text-gray-300 hover:text-brand-green py-2">About Us</a>
-    
-    <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
-    <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
-    <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
-    <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
-</div>
+    <div class="p-4">
+        <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white mb-6">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+        <div class="space-y-4">
+            <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-white hover:text-brand-green py-2">Home</a>
+            <a href="about.html" class="block text-gray-300 hover:text-brand-green py-2">About Us</a>
+            <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
+            <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
+            <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
+            <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
+        </div>
     </div>
+</div>
 
     <!-- HOME PAGE -->
     <div id="home-page" class="page active pt-16 md:pt-20">
@@ -301,7 +279,8 @@ input, button {
 
         <!-- Filters -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-<div class="flex flex-nowrap items-center gap-3 overflow-x-auto pb-4 hide-scrollbar snap-x px-2">                <button onclick="filterPitches('all')" class="filter-btn active px-4 md:px-6 py-2 rounded-full bg-brand-green text-black font-semibold border border-brand-green whitespace-nowrap text-sm transition-all">
+            <div class="flex flex-wrap items-center gap-2 md:gap-4 justify-center md:justify-start overflow-x-auto pb-2">
+                <button onclick="filterPitches('all')" class="filter-btn active px-4 md:px-6 py-2 rounded-full bg-brand-green text-black font-semibold border border-brand-green whitespace-nowrap text-sm transition-all">
                     All
                 </button>
                 <button onclick="filterPitches('5v5')" class="filter-btn px-4 md:px-6 py-2 rounded-full bg-brand-card text-gray-300 hover:text-white border border-white/10 hover:border-brand-green transition-all whitespace-nowrap text-sm">
@@ -353,7 +332,7 @@ input, button {
             </div>
             
             <!-- No Results -->
-         <div id="no-results" class="hidden text-center py-12">
+            <div id="no-results" class="hidden text-center py-12">
                 <i class="fa-solid fa-futbol text-6xl text-gray-600 mb-4"></i>
                 <h3 class="text-xl font-bold text-white mb-2">No pitches found</h3>
                 <p class="text-gray-400 mb-4">Try adjusting your filters or search terms</p>
@@ -361,7 +340,6 @@ input, button {
                     Clear All Filters
                 </button>
             </div>
-        </div> </div> ```
         </div>
     </div>
 
@@ -1134,126 +1112,50 @@ input, button {
 
     <!-- Toast Container -->
     <div id="toast-container"></div>
-    <div id="contact-page" class="page pt-16 md:pt-24 pb-12">
-    <div class="max-w-4xl mx-auto px-4">
-        <h1 class="text-3xl md:text-4xl font-bold mb-8 text-center">Contact Us</h1>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-brand-card rounded-2xl border border-white/10 p-8">
-                <h3 class="text-xl font-bold mb-6">Get in Touch</h3>
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Phone</p>
-                            <p class="font-semibold">+251 911 234 567</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Email</p>
-                            <p class="font-semibold">support@addispitch.com</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
-                            <i class="fa-solid fa-location-dot"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Office</p>
-                            <p class="font-semibold">Bole, Addis Ababa</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <form class="bg-brand-card rounded-2xl border border-white/10 p-8 space-y-4">
-                <input type="text" placeholder="Your Name" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none">
-                <input type="email" placeholder="Your Email" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none">
-                <textarea placeholder="Your Message" rows="4" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none"></textarea>
-                <button type="button" class="w-full bg-brand-green text-black font-bold py-3 rounded-xl hover:bg-brand-greenDark transition-all">Send Message</button>
-            </form>
-        </div>
-    </div>
-</div>
 
     <!-- Footer -->
-   <footer class="bg-brand-black border-t border-white/10 pt-16 pb-8 mt-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            
-            <div class="col-span-1 md:col-span-1 text-center md:text-left">
-                <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
-                    <div class="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center">
-                        <i class="fa-solid fa-futbol text-black"></i>
+    <footer class="bg-brand-dark border-t border-white/10 mt-auto py-8 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-3 md:mb-4">
+                        <i class="fa-solid fa-futbol text-brand-green text-xl md:text-2xl"></i>
+                        <span class="text-lg md:text-xl font-bold text-white">Addis<span class="text-brand-green">Pitch</span></span>
                     </div>
-                    <span class="text-xl font-bold text-white tracking-tight">Addis<span class="text-brand-green">Pitch</span></span>
+                    <p class="text-gray-400 text-xs md:text-sm max-w-xs">
+                        The leading platform for booking football pitches in Addis Ababa. Play more, worry less.
+                    </p>
+                    <div class="flex gap-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-telegram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-tiktok text-xl"></i></a>
+                    </div>
                 </div>
-                <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                    The #1 digital booking platform for football pitches in Addis Ababa. Search, book, and play.
-                </p>
-                <div class="flex justify-center md:justify-start gap-4">
-                    <a href="https://www.facebook.com/divineburger" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a href="https://t.me/divineburger_" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
-                        <i class="fa-brands fa-telegram"></i>
-                    </a>
-                    <a href="https://www.instagram.com/divineburger_" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/@divineburger_" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-green hover:text-black transition-all">
-                        <i class="fa-brands fa-tiktok"></i>
-                    </a>
+                <div>
+                    <h3 class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Company</h3>
+                    <ul class="space-y-2 text-xs md:text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-green transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Support</h3>
+                    <ul class="space-y-2 text-xs md:text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-green transition-colors">FAQ</a></li>
+                    </ul>
                 </div>
             </div>
-
-            <div class="text-center md:text-left">
-                <h4 class="text-white font-bold mb-6">Company</h4>
-                <ul class="space-y-4 text-gray-400 text-sm">
-                    <li><a href="javascript:void(0)" onclick="navigateTo('home')" class="hover:text-brand-green transition-colors">Home</a></li>
-<li>
-    <a href="about.html" class="text-gray-400 hover:text-brand-green transition-colors text-sm md:text-base">About Us</a>
-</li>                 <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact Us</a></li>
-                </ul>
-            </div>
-
-            <div class="text-center md:text-left">
-                <h4 class="text-white font-bold mb-6">Platform</h4>
-                <ul class="space-y-4 text-gray-400 text-sm">
-                    <li><a href="javascript:void(0)" onclick="navigateTo('tournaments')" class="hover:text-brand-green transition-colors">Tournaments</a></li>
-                    <li><a href="#" class="hover:text-brand-green transition-colors">List Your Pitch</a></li>
-                    <li><a href="#" class="hover:text-brand-green transition-colors">How it Works</a></li>
-                </ul>
-            </div>
-
-            <div class="text-center md:text-left">
-                <h4 class="text-white font-bold mb-6">Legal</h4>
-                <ul class="space-y-4 text-gray-400 text-sm">
-                    <li><a href="#" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
-                    <li><a href="#" class="hover:text-brand-green transition-colors">Refund Policy</a></li>
-                </ul>
+            <div class="border-t border-white/10 mt-8 md:mt-12 pt-6 md:pt-8 text-center text-gray-500 text-xs md:text-sm">
+                &copy; 2024 AddisPitch. All rights reserved.
             </div>
         </div>
-
-        <div class="pt-8 border-t border-white/5">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-500 text-sm text-center md:text-left">
-                    2026 AddisPitch. All rights reserved.
-                </p>
-                <div class="flex items-center gap-2 text-gray-500 text-sm">
-                    <span>Powered by</span>
-                    <span class="text-white font-medium italic">deeznuts</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     <script>
         // Pitch Data with coordinates
@@ -1508,43 +1410,23 @@ input, button {
         }
 
         // Navigation
-      function navigateTo(pageId) {
-    // 1. Hide every section with the 'page' class
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.add('hidden');
-        page.classList.remove('active');
-    });
-
-    // 2. Find the specific page (e.g., 'about-page')
-    const targetPage = document.getElementById(pageId + '-page');
-    
-    if (targetPage) {
-        // 3. Reveal the page
-        targetPage.classList.remove('hidden');
-        targetPage.classList.add('active');
-        
-        // 4. Scroll to the very top so they don't start at the bottom
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // 5. Close mobile menu if it's open (important for mobile users!)
-    if (typeof toggleMobileMenu === "function") {
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-            toggleMobileMenu();
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page + '-page').classList.add('active');
+            window.scrollTo(0, 0);
+            
+            if (page === 'location') {
+                setTimeout(() => initMap(), 100);
+            }
+            if (page === 'bookings') {
+                renderBookings();
+            }
         }
-    }
-}
+
         // Toggle Mobile Menu
-       function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    const overlay = document.getElementById('mobile-overlay');
-    menu.classList.toggle('open');
-    overlay.classList.toggle('hidden');
-    
-    // Prevent the background from scrolling when menu is open
-    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-}
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
 
         // Filter Pitches
         function filterPitches(filter) {
@@ -2617,9 +2499,6 @@ input, button {
             }
         });
     </script>
- 
-
-
 </body>
 </html>
 
