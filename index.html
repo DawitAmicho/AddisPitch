@@ -1165,8 +1165,9 @@ input, button {
                 <h4 class="text-white font-bold mb-6">Company</h4>
                 <ul class="space-y-4 text-gray-400 text-sm">
                     <li><a href="javascript:void(0)" onclick="navigateTo('home')" class="hover:text-brand-green transition-colors">Home</a></li>
-                    <li><a href="javascript:void(0)" onclick="navigateTo('about')" class="hover:text-brand-green transition-colors">About Us</a></li>
-                    <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact Us</a></li>
+<li>
+    <a href="javascript:void(0)" onclick="navigateTo('about')" class="hover:text-brand-green transition-colors">About Us</a>
+</li>                    <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -1196,7 +1197,7 @@ input, button {
                 </p>
                 <div class="flex items-center gap-2 text-gray-500 text-sm">
                     <span>Powered by</span>
-                    <span class="text-white font-medium italic">Divine Digital</span>
+                    <span class="text-white font-medium italic">deeznuts</span>
                 </div>
             </div>
         </div>
@@ -1456,31 +1457,33 @@ input, button {
         }
 
         // Navigation
-        function navigateTo(pageId) {
-    // 1. Hide every single page first
+      function navigateTo(pageId) {
+    // 1. Hide every section with the 'page' class
     document.querySelectorAll('.page').forEach(page => {
         page.classList.add('hidden');
         page.classList.remove('active');
     });
 
-    // 2. Find the page the user clicked (e.g., 'about-page')
+    // 2. Find the specific page (e.g., 'about-page')
     const targetPage = document.getElementById(pageId + '-page');
     
     if (targetPage) {
-        // 3. Show the new page
+        // 3. Reveal the page
         targetPage.classList.remove('hidden');
         targetPage.classList.add('active');
         
-        // 4. Smoothly scroll to the top of the screen
+        // 4. Scroll to the very top so they don't start at the bottom
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 5. If you have a mobile menu open, close it automatically
-    if (typeof toggleMobileMenu === "function" && !document.getElementById('mobile-menu').classList.contains('hidden')) {
-        toggleMobileMenu();
+    // 5. Close mobile menu if it's open (important for mobile users!)
+    if (typeof toggleMobileMenu === "function") {
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            toggleMobileMenu();
+        }
     }
 }
-
         // Toggle Mobile Menu
        function toggleMobileMenu() {
     const menu = document.getElementById('mobile-menu');
