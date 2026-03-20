@@ -215,13 +215,16 @@ input, button {
                     <span class="text-xl md:text-2xl font-bold tracking-tight text-white">Addis<span class="text-brand-green">Pitch</span></span>
                 </div>
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#" onclick="navigateTo('home')" class="text-white hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-                        <a href="#" onclick="navigateTo('tournaments')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Tournaments</a>
-                        <a href="#" onclick="navigateTo('location')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Location</a>
-                        <a href="#" onclick="navigateTo('bookings')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">My Bookings</a>
-                    </div>
-                </div>
+    <div class="ml-10 flex items-baseline space-x-8">
+        <a href="#" onclick="navigateTo('home')" class="text-white hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+        
+        <a href="about.html" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">About Us</a>
+        
+        <a href="#" onclick="navigateTo('tournaments')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Tournaments</a>
+        <a href="#" onclick="navigateTo('location')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Location</a>
+        <a href="#" onclick="navigateTo('bookings')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">My Bookings</a>
+    </div>
+</div>
                 <div class="flex items-center gap-4">
                     <button onclick="navigateTo('auth')" class="hidden md:block bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105">
                         Sign In
@@ -241,14 +244,15 @@ input, button {
             <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white mb-6">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
-            <div class="space-y-4">
-                <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-white hover:text-brand-green py-2">Home</a>
-                <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
-                <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
-                <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
-                <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
-            </div>
-        </div>
+          <div class="space-y-4">
+    <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-white hover:text-brand-green py-2">Home</a>
+    <a href="about.html" class="block text-gray-300 hover:text-brand-green py-2">About Us</a>
+    
+    <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
+    <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
+    <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
+    <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
+</div>
     </div>
 
     <!-- HOME PAGE -->
@@ -1129,6 +1133,52 @@ input, button {
 
     <!-- Toast Container -->
     <div id="toast-container"></div>
+    <div id="contact-page" class="page pt-16 md:pt-24 pb-12">
+    <div class="max-w-4xl mx-auto px-4">
+        <h1 class="text-3xl md:text-4xl font-bold mb-8 text-center">Contact Us</h1>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-brand-card rounded-2xl border border-white/10 p-8">
+                <h3 class="text-xl font-bold mb-6">Get in Touch</h3>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Phone</p>
+                            <p class="font-semibold">+251 911 234 567</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Email</p>
+                            <p class="font-semibold">support@addispitch.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">Office</p>
+                            <p class="font-semibold">Bole, Addis Ababa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form class="bg-brand-card rounded-2xl border border-white/10 p-8 space-y-4">
+                <input type="text" placeholder="Your Name" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none">
+                <input type="email" placeholder="Your Email" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none">
+                <textarea placeholder="Your Message" rows="4" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none"></textarea>
+                <button type="button" class="w-full bg-brand-green text-black font-bold py-3 rounded-xl hover:bg-brand-greenDark transition-all">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- Footer -->
    <footer class="bg-brand-black border-t border-white/10 pt-16 pb-8 mt-20">
@@ -1166,8 +1216,8 @@ input, button {
                 <ul class="space-y-4 text-gray-400 text-sm">
                     <li><a href="javascript:void(0)" onclick="navigateTo('home')" class="hover:text-brand-green transition-colors">Home</a></li>
 <li>
-    <a href="javascript:void(0)" onclick="navigateTo('about')" class="hover:text-brand-green transition-colors">About Us</a>
-</li>                    <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact Us</a></li>
+    <a href="about.html" class="text-gray-400 hover:text-brand-green transition-colors text-sm md:text-base">About Us</a>
+</li>                 <li><a href="javascript:void(0)" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -2566,119 +2616,9 @@ input, button {
             }
         });
     </script>
-   <div id="about-page" class="page hidden pt-24 pb-16">
-    <div class="max-w-5xl mx-auto px-6">
-        
-        <div class="text-center mb-16">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
-                Beyond the <span class="text-brand-green">90 Minutes</span>
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                AddisPitch is digitizing the heartbeat of Ethiopian football. We connect players to the best pitches in the city with a single tap.
-            </p>
-        </div>
+ 
 
-        <div class="grid md:grid-cols-2 gap-8 items-center bg-brand-card rounded-[2rem] border border-white/10 overflow-hidden mb-16">
-            <div class="p-8 md:p-12">
-                <span class="text-brand-green font-bold uppercase tracking-widest text-sm mb-4 block">Our Story</span>
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-white">Born in the heart of Addis Ababa</h2>
-                <p class="text-gray-400 mb-6 leading-relaxed">
-                    We noticed that booking a football pitch in Addis involved too many phone calls, uncertain availability, and manual payments. 
-                </p>
-                <p class="text-gray-400 leading-relaxed">
-                    Built by football fans for football fans, AddisPitch brings 24/7 real-time booking and secure Telebirr integration to the local game.
-                </p>
-            </div>
-            <div class="h-64 md:h-full min-h-[300px] relative">
-                <img src="https://images.unsplash.com/photo-1529900948638-1002061e8884?auto=format&fit=crop&q=80" 
-                     alt="Football in Ethiopia" 
-                     class="absolute inset-0 w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-r from-brand-card via-transparent to-transparent hidden md:block"></div>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div class="p-8 bg-brand-black border border-white/5 rounded-2xl hover:border-brand-green/30 transition-all group">
-                <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green mb-6 group-hover:bg-brand-green group-hover:text-black transition-all">
-                    <i class="fa-solid fa-bolt text-xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Instant Access</h3>
-                <p class="text-gray-500 text-sm">No more "calling the guy." See real-time slots for pitches in Bole, CMC, and beyond.</p>
-            </div>
-
-            <div class="p-8 bg-brand-black border border-white/5 rounded-2xl hover:border-brand-green/30 transition-all group">
-                <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green mb-6 group-hover:bg-brand-green group-hover:text-black transition-all">
-                    <i class="fa-solid fa-shield-check text-xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Secure Payments</h3>
-                <p class="text-gray-500 text-sm">Pay securely with Telebirr or CBE Birr. Receive your entry QR code instantly.</p>
-            </div>
-
-            <div class="p-8 bg-brand-black border border-white/5 rounded-2xl hover:border-brand-green/30 transition-all group">
-                <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green mb-6 group-hover:bg-brand-green group-hover:text-black transition-all">
-                    <i class="fa-solid fa-users text-xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Community First</h3>
-                <p class="text-gray-500 text-sm">We support local pitch owners and help organize community tournaments across the city.</p>
-            </div>
-        </div>
-
-        <div class="bg-brand-green rounded-[2rem] p-10 md:p-16 text-center text-black">
-            <h2 class="text-3xl md:text-4xl font-black mb-6">Ready to play?</h2>
-            <button onclick="navigateTo('home')" class="bg-black text-white px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform">
-                Find a Pitch Now
-            </button>
-        </div>
-
-    </div>
-</div>
-
-<div id="contact-page" class="page pt-16 md:pt-24 pb-12">
-    <div class="max-w-4xl mx-auto px-4">
-        <h1 class="text-3xl md:text-4xl font-bold mb-8 text-center">Contact Us</h1>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-brand-card rounded-2xl border border-white/10 p-8">
-                <h3 class="text-xl font-bold mb-6">Get in Touch</h3>
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Phone</p>
-                            <p class="font-semibold">+251 911 234 567</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Email</p>
-                            <p class="font-semibold">support@addispitch.com</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green">
-                            <i class="fa-solid fa-location-dot"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-400">Office</p>
-                            <p class="font-semibold">Bole, Addis Ababa</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <form class="bg-brand-card rounded-2xl border border-white/10 p-8 space-y-4">
-                <input type="text" placeholder="Your Name" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none">
-                <input type="email" placeholder="Your Email" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none">
-                <textarea placeholder="Your Message" rows="4" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-brand-green outline-none"></textarea>
-                <button type="button" class="w-full bg-brand-green text-black font-bold py-3 rounded-xl hover:bg-brand-greenDark transition-all">Send Message</button>
-            </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>
 

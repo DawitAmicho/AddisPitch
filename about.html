@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story | AddisPitch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { green: '#10b981', black: '#0a0a0a' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: white; }
+        .hero-text { font-weight: 900; letter-spacing: -0.05em; line-height: 0.9; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="p-6 md:p-10">
+        <a href="index.html" class="text-brand-green font-bold flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12 md:py-24">
+        <header class="mb-20">
+            <h1 class="hero-text text-6xl md:text-9xl mb-8">
+                OUR <br> <span class="text-brand-green italic">STORY.</span>
+            </h1>
+            <p class="text-gray-500 tracking-[0.2em] uppercase text-sm font-bold">Est. 2026 — Addis Ababa</p>
+        </header>
+
+        <div class="space-y-16 md:space-y-24">
+            
+            <section>
+                <h2 class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">01 / The Mission</h2>
+                <p class="text-2xl md:text-4xl font-light leading-tight text-gray-200">
+                    We didn't just want to build a website; we wanted to <span class="text-white font-medium italic underline decoration-brand-green underline-offset-8">fix the game.</span> In a city that breathes football, booking a pitch shouldn't be the hardest part of the match.
+                </p>
+            </section>
+
+            <section class="border-l border-brand-green/30 pl-8 md:pl-12">
+                <h2 class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">02 / The Innovation</h2>
+                <p class="text-xl md:text-3xl font-light leading-relaxed text-gray-400">
+                    By removing the friction of phone calls and physical cash, <span class="text-white">AddisPitch</span> bridges the gap between local stadium owners and the players who need them. One click, one Telebirr payment, one match.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">03 / The Future</h2>
+                <p class="text-2xl md:text-4xl font-light leading-tight text-gray-200">
+                    Our story is just beginning. We are expanding to every corner of <span class="text-white font-medium underline decoration-brand-green underline-offset-8 text-nowrap">Addis Ababa</span>, ensuring that whenever you feel like playing, there's a field waiting for you.
+                </p>
+            </section>
+
+        </div>
+
+        <footer class="mt-32 pt-12 border-t border-white/10 opacity-40 text-center">
+            <p class="text-xs tracking-widest uppercase">AddisPitch &bull; Divine Digital &bull; 2026</p>
+        </footer>
+    </main>
+
+</body>
+</html>
