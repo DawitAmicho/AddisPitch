@@ -206,12 +206,23 @@
     </div>
 </div>
                 <div class="flex items-center gap-4">
+                   
                     <button onclick="navigateTo('auth')" class="hidden md:block bg-brand-green hover:bg-brand-greenDark text-black font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105">
                         Sign In
                     </button>
                     <button onclick="toggleMobileMenu()" class="md:hidden text-white p-2">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
+                     <div class="inline-flex items-center gap-0.5 bg-white/5 rounded-full p-0.5 border border-white/10 w-max">
+    <button onclick="setLanguage('en')" id="lang-en" 
+        class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold transition-all bg-brand-green text-black leading-none">
+        EN
+    </button>
+    <button onclick="setLanguage('am')" id="lang-am" 
+        class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold transition-all text-gray-400 hover:text-white leading-none">
+        አማ
+    </button>
+</div>
                 </div>
             </div>
         </div>

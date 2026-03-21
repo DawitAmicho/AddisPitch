@@ -24,40 +24,49 @@
 <body class="antialiased">
 
     <nav class="p-6 md:p-10">
-        <a href="index.html" class="text-brand-green font-bold flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <i class="fa-solid fa-arrow-left"></i> Back to Home
-        </a>
+        <a href="index.html" data-i18n="nav_back" class="text-brand-green font-bold flex items-center gap-2 hover:opacity-80 transition-opacity">
+    <i class="fa-solid fa-arrow-left"></i> Back to Home
+</a><div class="inline-flex items-center gap-0.5 bg-white/5 rounded-full p-0.5 border border-white/10 w-max">
+    <button onclick="setLanguage('en')" id="lang-en" 
+        class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold transition-all bg-brand-green text-black leading-none">
+        EN
+    </button>
+    <button onclick="setLanguage('am')" id="lang-am" 
+        class="px-2 py-1 rounded-full text-[10px] md:text-xs font-bold transition-all text-gray-400 hover:text-white leading-none">
+        አማ
+    </button>
+</div>
     </nav>
 
     <main class="max-w-4xl mx-auto px-6 py-12 md:py-24">
         <header class="mb-20">
-            <h1 class="hero-text text-6xl md:text-9xl mb-8">
-                OUR <br> <span class="text-brand-green italic">STORY.</span>
-            </h1>
-            <p class="text-gray-500 tracking-[0.2em] uppercase text-sm font-bold">Est. 2026 — Addis Ababa</p>
+          <h1 class="hero-text text-6xl md:text-9xl mb-8" data-i18n="story_title">
+    OUR <br> <span class="text-brand-green italic">STORY.</span>
+</h1>
+<p class="text-gray-500 tracking-[0.2em] uppercase text-sm font-bold" data-i18n="story_est">Est. 2026 — Addis Ababa</p>
         </header>
 
         <div class="space-y-16 md:space-y-24">
             
             <section>
-                <h2 class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">01 / The Mission</h2>
-                <p class="text-2xl md:text-4xl font-light leading-tight text-gray-200">
-                    We didn't just want to build a website; we wanted to <span class="text-white font-medium italic underline decoration-brand-green underline-offset-8">fix the game.</span> In a city that breathes football, booking a pitch shouldn't be the hardest part of the match.
-                </p>
+               <h2 data-i18n="mission_num" class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">01 / The Mission</h2>
+<p data-i18n="mission_text" class="text-2xl md:text-4xl font-light leading-tight text-gray-200">
+    We didn't just want to build a website; we wanted to <span class="text-white font-medium italic underline decoration-brand-green underline-offset-8">fix the game.</span> In a city that breathes football, booking a pitch shouldn't be the hardest part of the match.
+</p>
             </section>
 
             <section class="border-l border-brand-green/30 pl-8 md:pl-12">
-                <h2 class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">02 / The Innovation</h2>
-                <p class="text-xl md:text-3xl font-light leading-relaxed text-gray-400">
-                    By removing the friction of phone calls and physical cash, <span class="text-white">AddisPitch</span> bridges the gap between local stadium owners and the players who need them. One click, one Telebirr payment, one match.
-                </p>
+                <h2 data-i18n="innovation_num" class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">02 / The Innovation</h2>
+<p data-i18n="innovation_text" class="text-xl md:text-3xl font-light leading-relaxed text-gray-400">
+    By removing the friction of phone calls and physical cash, <span class="text-white">AddisPitch</span> bridges the gap between local stadium owners and the players who need them. One click, one Telebirr payment, one match.
+</p>
             </section>
 
             <section>
-                <h2 class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">03 / The Future</h2>
-                <p class="text-2xl md:text-4xl font-light leading-tight text-gray-200">
-                    Our story is just beginning. We are expanding to every corner of <span class="text-white font-medium underline decoration-brand-green underline-offset-8 text-nowrap">Addis Ababa</span>, ensuring that whenever you feel like playing, there's a field waiting for you.
-                </p>
+             <h2 data-i18n="future_num" class="text-brand-green text-xs font-bold uppercase tracking-widest mb-6">03 / The Future</h2>
+<p data-i18n="future_text" class="text-2xl md:text-4xl font-light leading-tight text-gray-200">
+    Our story is just beginning. We are expanding to every corner of <span class="text-white font-medium underline decoration-brand-green underline-offset-8 text-nowrap">Addis Ababa</span>, ensuring that whenever you feel like playing, there's a field waiting for you.
+</p>
             </section>
 
         </div>
@@ -66,6 +75,100 @@
             <p class="text-xs tracking-widest uppercase">AddisPitch &bull; nutmegDigital &bull; 2026</p>
         </footer>
     </main>
+    <script>
+// 1. The Translation Data Object
+const translations = {
+    en: {
+        // Nav & Hero
+        nav_back: '<i class="fa-solid fa-arrow-left"></i> Back to Home',
+        story_title: 'OUR <br> <span class="text-brand-green italic">STORY.</span>',
+        story_est: 'Est. 2026 — Addis Ababa',
+        
+        // Section 01
+        mission_num: '01 / The Mission',
+        mission_text: "We didn't just want to build a website; we wanted to <span class='text-white font-medium italic underline decoration-brand-green underline-offset-8'>fix the game.</span> In a city that breathes football, booking a pitch shouldn't be the hardest part of the match.",
+        
+        // Section 02
+        innovation_num: '02 / The Innovation',
+        innovation_text: 'By removing the friction of phone calls and physical cash, <span class="text-white">AddisPitch</span> bridges the gap between local stadium owners and the players who need them. One click, one Telebirr payment, one match.',
+        
+        // Section 03
+        future_num: '03 / The Future',
+        future_text: "Our story is just beginning. We are expanding to every corner of <span class='text-white font-medium underline decoration-brand-green underline-offset-8 text-nowrap'>Addis Ababa</span>, ensuring that whenever you feel like playing, there's a field waiting for you.",
+        
+        // Footer
+        footer_text: 'AddisPitch &bull; nutmegDigital &bull; 2026'
+    },
+    am: {
+        // Nav & Hero
+        nav_back: '<i class="fa-solid fa-arrow-left"></i> ወደ መነሻ ይመለሱ',
+        story_title: 'የእኛ <br> <span class="text-brand-green italic">ታሪክ።</span>',
+        story_est: 'ተመሰረተ 2026 — አዲስ አበባ',
+        
+        // Section 01
+        mission_num: '01 / ተልዕኮ',
+        mission_text: "እኛ ድህረ ገጽ መገንባት ብቻ አልፈለግንም፤ <span class='text-white font-medium italic underline decoration-brand-green underline-offset-8'>ጨዋታውን ማስተካከል</span> እንጂ። እግር ኳስ በሚተነፍስ ከተማ ውስጥ ሜዳ ማስያዝ የጨዋታው ከባዱ ክፍል መሆን የለበትም።",
+        
+        // Section 02
+        innovation_num: '02 / ፈጠራ',
+        innovation_text: 'የስልክ ጥሪዎችን እና ጥሬ ገንዘብን በማስቀረት <span class="text-white">AddisPitch</span> በስታዲየም ባለቤቶች እና በተጫዋቾች መካከል ያለውን ልዩነት ያጠባል። አንድ ክሊክ፣ አንድ የቴሌብር ክፍያ፣ አንድ ጨዋታ።',
+        
+        // Section 03
+        future_num: '03 / ወደፊት',
+        future_text: "ታሪካችን ገና እየጀመረ ነው። በማንኛውም ጊዜ መጫወት ሲፈልጉ የሚጠብቅዎት ሜዳ መኖሩን ለማረጋገጥ ወደ እያንዳንዱ የ<span class='text-white font-medium underline decoration-brand-green underline-offset-8 text-nowrap'>አዲስ አበባ</span> ጥግ እየተስፋፋን ነው።",
+        
+        // Footer
+        footer_text: 'አዲስፒች &bull; ናትሜግ ዲጂታል &bull; 2026'
+    }
+};
+
+// 2. The Logic Function
+function setLanguage(lang) {
+    // Save preference to browser memory
+    localStorage.setItem('addisPitch_lang', lang);
+
+    // Update Toggle Buttons UI
+    const enBtn = document.getElementById('lang-en');
+    const amBtn = document.getElementById('lang-am');
+    
+    if (lang === 'am') {
+        amBtn.classList.replace('text-gray-400', 'bg-brand-green');
+        amBtn.classList.add('text-black');
+        enBtn.classList.replace('bg-brand-green', 'text-gray-400');
+        enBtn.classList.remove('text-black');
+    } else {
+        enBtn.classList.replace('text-gray-400', 'bg-brand-green');
+        enBtn.classList.add('text-black');
+        amBtn.classList.replace('bg-brand-green', 'text-gray-400');
+        amBtn.classList.remove('text-black');
+    }
+
+    // Loop through all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = translations[lang][key];
+
+        if (translation) {
+            // Check if it's an input (to update placeholder) or normal text
+            if (element.tagName === 'INPUT') {
+                element.placeholder = translation;
+            } else {
+                element.innerHTML = translation;
+            }
+        }
+    });
+    
+    // Set the HTML lang attribute for accessibility/SEO
+    document.documentElement.lang = lang;
+}
+
+// 3. Initialize on Page Load
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if user has a saved preference, otherwise default to English
+    const savedLang = localStorage.getItem('addisPitch_lang') || 'en';
+    setLanguage(savedLang);
+});
+</script>
 
 </body>
 </html>
