@@ -196,14 +196,14 @@
                     <span class="text-xl md:text-2xl font-bold tracking-tight text-white">Addis<span class="text-brand-green">Pitch</span></span>
                 </div>
                 <div class="hidden md:block">
-    <div class="ml-10 flex items-baseline space-x-8">
-        <a href="#" onclick="navigateTo('home')" class="text-white hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-        <a href="about.html" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">About Us</a>
-        <a href="#" onclick="navigateTo('contact')" ...>Contact</a>
-        <a href="#" onclick="navigateTo('tournaments')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Tournaments</a>
-        <a href="#" onclick="navigateTo('location')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Location</a>
-        <a href="#" onclick="navigateTo('bookings')" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">My Bookings</a>
-    </div>
+   <div class="ml-10 flex items-baseline space-x-8">
+    <a href="#" onclick="navigateTo('home')" data-i18n="nav_home" class="text-white hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+    <a href="about.html" data-i18n="nav_about" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">About Us</a>
+    <a href="#" onclick="navigateTo('contact')" data-i18n="nav_contact" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
+    <a href="#" onclick="navigateTo('tournaments')" data-i18n="nav_tournaments" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Tournaments</a>
+    <a href="#" onclick="navigateTo('location')" data-i18n="nav_location" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">Location</a>
+    <a href="#" onclick="navigateTo('bookings')" data-i18n="nav_bookings" class="text-gray-300 hover:text-brand-green px-3 py-2 rounded-md text-sm font-medium transition-colors">My Bookings</a>
+</div>
 </div>
                 <div class="flex items-center gap-4">
                    
@@ -228,14 +228,14 @@
         <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white mb-6">
             <i class="fa-solid fa-xmark text-xl"></i>
         </button>
-        <div class="space-y-4">
-            <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-white hover:text-brand-green py-2">Home</a>
-            <a href="about.html" class="block text-gray-300 hover:text-brand-green py-2">About Us</a>
-            <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
-            <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
-            <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
-            <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
-        </div>
+     <div class="space-y-4">
+    <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" data-i18n="nav_home" class="block text-white hover:text-brand-green py-2">Home</a>
+    <a href="about.html" data-i18n="nav_about" class="block text-gray-300 hover:text-brand-green py-2">About Us</a>
+    <a href="#" onclick="navigateTo('tournaments'); toggleMobileMenu()" data-i18n="nav_tournaments" class="block text-gray-300 hover:text-brand-green py-2">Tournaments</a>
+    <a href="#" onclick="navigateTo('location'); toggleMobileMenu()" data-i18n="nav_location" class="block text-gray-300 hover:text-brand-green py-2">Location</a>
+    <a href="#" onclick="navigateTo('bookings'); toggleMobileMenu()" data-i18n="nav_bookings" class="block text-gray-300 hover:text-brand-green py-2">My Bookings</a>
+    <a href="#" onclick="navigateTo('auth'); toggleMobileMenu()" data-i18n="nav_signin" class="block text-gray-300 hover:text-brand-green py-2">Sign In</a>
+</div>
     </div>
 </div>
 
@@ -249,36 +249,35 @@
             </div>
             
             <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
-                <h1 class="hero-title text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 md:mb-6">
-                    Find Your Field in <span class="text-brand-green">Addis Ababa</span>
-                </h1>
-                <p class="text-base md:text-xl text-gray-400 mb-8 md:mb-10 max-w-2xl mx-auto px-4">
-                    Book premium 5v5 and 7v7 pitches instantly. From Bole to Kazanchis, we've got the best turf for your next match.
-                </p>
+                <h1 data-i18n="hero_title" class="hero-title text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 md:mb-6">
+        Find Your Field in <span class="text-brand-green">Addis Ababa</span>
+    </h1>
+    <p data-i18n="hero_subtitle" class="text-base md:text-xl text-gray-400 mb-8 md:mb-10 max-w-2xl mx-auto px-4">
+        Book premium 5v5 and 7v7 pitches instantly. From Bole to Kazanchis, we've got the best turf for your next match.
+    </p>
                 
                 <!-- Search Bar -->
                 <div class="bg-brand-card p-3 md:p-4 rounded-2xl shadow-2xl border border-white/10 flex flex-col md:flex-row gap-3 md:gap-4 max-w-3xl mx-auto">
                     <div class="flex-1 relative">
                         <i class="fa-solid fa-location-dot absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="home-location-search" placeholder="Location (e.g., Bole, CMC)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green transition-colors text-sm md:text-base">
-                    </div>
+<input type="text" id="home-location-search" data-i18n="placeholder_location_search" placeholder="Location (e.g., Bole, CMC)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green transition-colors text-sm md:text-base">                    </div>
                     <div class="flex-1 relative">
                         <i class="fa-regular fa-calendar absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="home-date-input" placeholder="Date & Time" readonly onclick="toggleCalendar('home')" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green transition-colors cursor-pointer text-sm md:text-base">
-                        <div id="home-calendar-dropdown" class="calendar-dropdown hidden mt-2 w-full max-w-xs">
+<input type="text" id="home-date-input" data-i18n="placeholder_date_time" placeholder="Date & Time" readonly onclick="toggleCalendar('home')" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-green transition-colors cursor-pointer text-sm md:text-base">                        <div id="home-calendar-dropdown" class="calendar-dropdown hidden mt-2 w-full max-w-xs">
                             <div id="home-calendar"></div>
                         </div>
                     </div>
                     <button onclick="searchPitches()" class="bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 px-4 md:px-8 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
-                        <i class="fa-solid fa-magnifying-glass"></i> <span class="hidden md:inline">Search</span>
+                        <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="btn_search" class="hidden md:inline">Search</span>
                     </button>
                 </div>
 
                 <!-- Near Me Button -->
                 <div class="mt-4 md:mt-6">
                     <button onclick="findNearMe()" class="bg-white/10 hover:bg-brand-green hover:text-black text-white border border-white/20 font-semibold py-2 md:py-3 px-4 md:px-8 rounded-xl transition-all flex items-center gap-2 mx-auto text-sm md:text-base">
-                        <i class="fa-solid fa-location-crosshairs"></i> Find Pitches Near Me
-                    </button>
+    <i class="fa-solid fa-location-crosshairs"></i> 
+    <span data-i18n="near_me">Find Pitches Near Me</span>
+</button>
                 </div>
             </div>
         </div>
@@ -441,39 +440,33 @@
 
             <!-- Booking Summary -->
             <div class="bg-brand-card rounded-2xl border border-white/10 p-4 md:p-6 mt-4 md:mt-6">
-                <h2 class="text-lg md:text-xl font-bold mb-4">Booking Summary</h2>
-                <div class="space-y-2 md:space-y-3 text-sm md:text-base">
+<h2 data-i18n="booking_summary_title" class="text-lg md:text-xl font-bold mb-4">Booking Summary</h2>                <div class="space-y-2 md:space-y-3 text-sm md:text-base">
                     <div class="flex justify-between">
-                        <span class="text-gray-400">Date</span>
-                        <span id="summary-date" class="text-white">-</span>
+<span data-i18n="label_date" class="text-gray-400">Date</span>                        <span id="summary-date" class="text-white">-</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-400">Time</span>
-                        <span id="summary-time" class="text-white">-</span>
+<span data-i18n="label_time" class="text-gray-400">Time</span>                        <span id="summary-time" class="text-white">-</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-400">Duration</span>
-                        <span id="summary-duration" class="text-white">1 Hour</span>
+<span data-i18n="label_duration" class="text-gray-400">Duration</span>                        <span id="summary-duration" class="text-white">1 Hour</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-400">Price</span>
-                        <span id="summary-price" class="text-white">ETB 0</span>
+<span data-i18n="label_price" class="text-gray-400">Price</span>                        <span id="summary-price" class="text-white">ETB 0</span>
                     </div>
                     <div class="border-t border-white/10 pt-3 md:pt-4 flex justify-between text-base md:text-lg font-bold">
-                        <span class="text-white">Total</span>
-                        <span id="summary-total" class="text-brand-green">ETB 0</span>
+<span data-i18n="label_total" class="text-white">Total</span>                        <span id="summary-total" class="text-brand-green">ETB 0</span>
                     </div>
                 </div>
 
-                <div class="mt-4 md:mt-6 space-y-3 md:space-y-4">
-                    <input type="text" id="booking-name" placeholder="Full Name" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
-                    <input type="tel" id="booking-phone" placeholder="Phone Number (+251...)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
-                    <input type="email" id="booking-email" placeholder="Email (optional)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
-                </div>
+               <div class="mt-4 md:mt-6 space-y-3 md:space-y-4">
+    <input type="text" id="booking-name" data-i18n="placeholder_name" placeholder="Full Name" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+    <input type="tel" id="booking-phone" data-i18n="placeholder_phone" placeholder="Phone Number (+251...)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+    <input type="email" id="booking-email" data-i18n="placeholder_email" placeholder="Email (optional)" class="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm md:text-base">
+</div>
 
-                <button onclick="proceedToPayment()" class="w-full mt-4 md:mt-6 bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 md:py-4 rounded-xl transition-all transform hover:scale-[1.02] text-sm md:text-base">
-                    Proceed to Payment
-                </button>
+                <button onclick="proceedToPayment()" data-i18n="btn_proceed_payment" class="w-full mt-4 md:mt-6 bg-brand-green hover:bg-brand-greenDark text-black font-bold py-3 md:py-4 rounded-xl transition-all transform hover:scale-[1.02] text-sm md:text-base">
+    Proceed to Payment
+</button>
             </div>
         </div>
     </div>
@@ -1173,9 +1166,9 @@
                         <i class="fa-solid fa-futbol text-brand-green text-xl md:text-2xl"></i>
                         <span class="text-lg md:text-xl font-bold text-white">Addis<span class="text-brand-green">Pitch</span></span>
                     </div>
-                    <p class="text-gray-400 text-xs md:text-sm max-w-xs">
-                        The leading platform for booking football pitches in Addis Ababa. Play more, worry less.
-                    </p>
+                    <p data-i18n="footer_desc" class="text-gray-400 text-xs md:text-sm max-w-xs">
+    The leading platform for booking football pitches in Addis Ababa. Play more, worry less.
+</p>
                     <div class="flex gap-4 mt-4">
                         <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-facebook text-xl"></i></a>
                         <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-telegram text-xl"></i></a>
@@ -1183,23 +1176,23 @@
                         <a href="#" class="text-gray-400 hover:text-brand-green transition-colors"><i class="fa-brands fa-tiktok text-xl"></i></a>
                     </div>
                 </div>
-               <div>
-    <h3 class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Company</h3>
+              <div>
+    <h3 data-i18n="footer_company_title" class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Company</h3>
     <ul class="space-y-2 text-xs md:text-sm text-gray-400">
-        <li><a href="about.html" class="hover:text-brand-green transition-colors text-white font-medium">About Us</a></li>
-        <li><a href="#" class="hover:text-brand-green transition-colors">Careers</a></li>
-        <li><a href="#" class="hover:text-brand-green transition-colors">Blog</a></li>
-        <li><a href="#" onclick="navigateTo('contact')" class="hover:text-brand-green transition-colors">Contact</a></li>
+        <li><a href="about.html" data-i18n="nav_about" class="hover:text-brand-green transition-colors text-white font-medium">About Us</a></li>
+        <li><a href="#" data-i18n="footer_careers" class="hover:text-brand-green transition-colors">Careers</a></li>
+        <li><a href="#" data-i18n="footer_blog" class="hover:text-brand-green transition-colors">Blog</a></li>
+        <li><a href="#" onclick="navigateTo('contact')" data-i18n="nav_contact" class="hover:text-brand-green transition-colors">Contact</a></li>
     </ul>
 </div>
                 <div>
-                    <h3 class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Support</h3>
-                    <ul class="space-y-2 text-xs md:text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-brand-green transition-colors">Help Center</a></li>
-                        <li><a href="#" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-brand-green transition-colors">FAQ</a></li>
-                    </ul>
+                   <h3 data-i18n="footer_support_title" class="text-white font-semibold mb-3 md:mb-4 text-sm md:text-base">Support</h3>
+    <ul class="space-y-2 text-xs md:text-sm text-gray-400">
+        <li><a href="#" data-i18n="footer_help" class="hover:text-brand-green transition-colors">Help Center</a></li>
+        <li><a href="#" data-i18n="footer_terms" class="hover:text-brand-green transition-colors">Terms of Service</a></li>
+        <li><a href="#" data-i18n="footer_privacy" class="hover:text-brand-green transition-colors">Privacy Policy</a></li>
+        <li><a href="#" data-i18n="footer_faq" class="hover:text-brand-green transition-colors">FAQ</a></li>
+    </ul>
                 </div>
             </div>
             <div class="border-t border-white/10 mt-8 md:mt-12 pt-6 md:pt-8 text-center text-gray-500 text-xs md:text-sm">
@@ -1695,9 +1688,9 @@
                                 <span class="text-xs text-gray-400 block">Price per hour</span>
                                 <span class="text-lg md:text-xl font-bold text-white">ETB ${pitch.price}</span>
                             </div>
-                            <button class="bg-brand-green hover:bg-brand-greenDark text-black px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-semibold transition-all">
-                                Book Now
-                            </button>
+                          <button data-i18n="btn_book_now" class="bg-brand-green hover:bg-brand-greenDark text-black px-3 md:px-4 py-1 md:py-2 rounded-lg text-xs md:text-sm font-semibold transition-all">
+    Book Now
+</button>
                         </div>
                     </div>
                 </div>
@@ -2549,6 +2542,136 @@
                 document.getElementById('booking-calendar-dropdown')?.classList.add('hidden');
             }
         });
+        // 1. Translation Dictionary
+const translations = {
+    en: {
+        // Navigation (Desktop & Mobile)
+        "nav_home": "Home",
+        "nav_about": "About Us",
+        "nav_contact": "Contact",
+        "nav_tournaments": "Tournaments",
+        "nav_location": "Location",
+        "nav_bookings": "My Bookings",
+        "nav_signin": "Sign In",
+        "near_me": "Find Pitches Near Me",
+
+        // Hero Section
+        "hero_title": "Find Your Field in <span class='text-brand-green'>Addis Ababa</span>",
+        "hero_subtitle": "Book premium 5v5 and 7v7 pitches instantly. From Bole to Kazanchis, we've got the best turf for your next match.",
+        "footer_desc": "The leading platform for booking football pitches in Addis Ababa. Play more, worry less.",
+        "footer_company_title": "Company",
+        "footer_careers": "Careers",
+        "footer_blog": "Blog",
+        "footer_support_title": "Support",
+        "footer_help": "Help Center",
+        "footer_terms": "Terms of Service",
+        "footer_privacy": "Privacy Policy",
+        "footer_faq": "FAQ",
+        "btn_proceed_payment": "Proceed to Payment",
+        "booking_summary_title": "Booking Summary",
+        "placeholder_name": "Full Name",
+        "placeholder_phone": "Phone Number (+251...)",
+        "placeholder_email": "Email (optional)",
+        "label_total": "Total",
+        "label_price": "Price",
+        "label_time": "Time",
+        "label_date": "Date",
+        "label_duration": "Duration",
+        "btn_search": "Search",
+        "placeholder_date_time": "Date & Time",
+        "placeholder_location_search": "Location (e.g., Bole, CMC)",
+        "btn_book_now": "Book Now"
+        
+
+ },
+    am: {
+        // Navigation (Desktop & Mobile)
+        "nav_home": "መነሻ",
+        "nav_about": "ስለ እኛ",
+        "nav_contact": "አግኙን",
+        "nav_tournaments": "ውድድሮች",
+        "nav_location": "አድራሻ",
+        "nav_bookings": "ቦታ ማስያዣ",
+        "nav_signin": "ግባ",
+        "near_me": "በአቅራቢያ ያሉ ሜዳዎች",
+        "booking_summary_title": "የቦታ ማስያዣ ማጠቃለያ",
+        "placeholder_name": "ሙሉ ስም",
+        "placeholder_phone": "ስልክ ቁጥር (+251...)",
+        "placeholder_email": "ኢሜይል (አማራጭ)",
+        "label_total": "ጠቅላላ",
+        "label_price": "ዋጋ",
+        "label_time": "ሰዓት",
+        "label_date": "ቀን",
+        "label_duration": "ቆይታ",
+        "btn_search": "ፈልግ",
+        "placeholder_location_search": "አካባቢ (ምሳሌ፦ ቦሌ፣ ሲኤምሲ)",
+        "btn_book_now": "አሁን ያስይዙ",
+        
+
+        // Hero Section
+        "hero_title": "በ<span class='text-brand-green'>አዲስ አበባ</span> የመጫወቻ ሜዳ ያግኙ",
+
+        "hero_subtitle": "ምርጥ የ5v5 እና የ7v7 ሜዳዎችን በፍጥነት ያስይዙ። ከቦሌ እስከ ካዛንቺስ ለሚቀጥለው ጨዋታዎ ምርጥ ሜዳዎች አሉን።",
+        "footer_desc": "በአዲስ አበባ የእግር ኳስ ሜዳዎችን ለማስያዝ ቀዳሚው ፕላትፎርም። ብዙ ይጫወቱ፣ ጭንቀትን ይቀንሱ።",
+        "footer_company_title": "ድርጅት",
+        "footer_careers": "ስራዎች",
+        "footer_blog": "ብሎግ" ,
+        "footer_support_title": "ድጋፍ",
+        "footer_help": "የእርዳታ ማዕከል",
+        "footer_terms": "የአገልግሎት ውሎች",
+        "footer_privacy": "የግላዊነት ፖሊሲ",
+        "footer_faq": "ተደጋጋሚ ጥያቄዎች",
+        "btn_proceed_payment": "ወደ ክፍያ ቀጥል",
+        "placeholder_date_time": "ቀን እና ሰዓት"
+     }
+};
+
+// 2. Language Switching Logic
+function setLanguage(lang) {
+    // Save the user's preference to localStorage
+    localStorage.setItem('preferredLanguage', lang);
+    
+    // Update the visual state of the toggle buttons
+    const enBtn = document.getElementById('lang-en');
+    const amBtn = document.getElementById('lang-am');
+    
+    if (lang === 'am') {
+        amBtn.classList.add('bg-brand-green', 'text-black');
+        amBtn.classList.remove('text-gray-400');
+        enBtn.classList.remove('bg-brand-green', 'text-black');
+        enBtn.classList.add('text-gray-400');
+    } else {
+        enBtn.classList.add('bg-brand-green', 'text-black');
+        enBtn.classList.remove('text-gray-400');
+        amBtn.classList.remove('bg-brand-green', 'text-black');
+        amBtn.classList.add('text-gray-400');
+    }
+
+    // Find all elements with the data-i18n attribute and update them
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = translations[lang][key];
+
+        if (translation) {
+            // If it's an input field, update the placeholder
+            if (element.tagName === 'INPUT') {
+                element.placeholder = translation;
+            } else {
+                // Otherwise update the inner HTML (allows for <span> tags)
+                element.innerHTML = translation;
+            }
+        }
+    });
+    
+    // Update the document language attribute for SEO/Accessibility
+    document.documentElement.lang = lang;
+}
+
+// 3. Initialize on Load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    setLanguage(savedLang);
+});
     </script>
 </body>
 </html>
